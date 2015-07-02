@@ -1,7 +1,7 @@
 {
   "name": "stickler",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "Component based validations for Ember",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -9,13 +9,14 @@
   "scripts": {
     "start": "ember server",
     "build": "ember build",
-    "test": "ember try:testall"
+    "test": "ember try:testall",
+    "postinstall": "bower install"
   },
   "repository": "",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Seth Pollack",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.2",
@@ -35,7 +36,10 @@
     "ember-try": "0.0.6"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "validations",
+    "validate",
+    "stickler"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.0.0"
