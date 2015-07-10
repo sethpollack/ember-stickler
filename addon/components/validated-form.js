@@ -18,7 +18,7 @@ export default Ember.Component.extend({
   },
 
   valid: Ember.computed('fields.@each.isValid', function() {
-    var isValid = this.get('fields').every((field) => { return field.get('isValid'); } );
+    return this.get('fields').every((field) => { return field.get('isValid'); } );
   }),
 
   actions: {
