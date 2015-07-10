@@ -4,8 +4,14 @@ export default Ember.Mixin.create({
 	targetObject: Ember.computed.alias('parentView'),
 	setup: Ember.on('didInsertElement', function() {
 		this.sendAction('register', this);
-		let rules = this.getWithDefault('rules', '').split(',');
+
+		let rules = this.get('rules');
+		rules = rules ? rules.split(' ') : [];
 		rules.push('required');
+
+		rules = rules.map(rule => {
+			return this.container.lookupFactory(`validation:${rule}`).validate.bind(this);
+		});
 
 		this.set('selectedRules', rules);
 	}),
@@ -52,10 +58,8 @@ function runValidations(self) {
 		return [];
 	}
 
-	let rules = self.get('selectedRules');
+	const rules = self.get('selectedRules');
 
-	return rules.map(rule => {
-		return self.container.lookupFactory(`validation:${rule}`)(self, value);
-	})
-	.filter(rule => !!rule);
+	return rules.map(rule => rule())
+		.filter(rule => !!rule);
 }
