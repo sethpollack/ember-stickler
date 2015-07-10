@@ -2,8 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 	targetObject: Ember.computed.alias('parentView'),
-	setup: Ember.on('didInsertElement', function() {
-		this.sendAction('register', this);
+	init: function() {
+		this._super();
 
 		let rules = this.get('rules');
 		rules = rules ? rules.split(' ') : [];
@@ -14,6 +14,9 @@ export default Ember.Mixin.create({
 		});
 
 		this.set('selectedRules', rules);
+	},
+	setup: Ember.on('didInsertElement', function() {
+		this.sendAction('register', this);
 	}),
 	actions: {
 		checkForValid() {

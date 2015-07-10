@@ -17,7 +17,6 @@ export default Ember.Route.extend({
 				email: '',
 				optional: ''
 			});
-			console.log('submitted!!!');
 			form.send('resetFields');
 		}
 	}
