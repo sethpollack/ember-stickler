@@ -1,24 +1,17 @@
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
-	targetObject: Ember.computed.alias('parentView'),
-	init: function() {
-		this._super();
 
-		let rules = this.get('rules');
-		rules = rules ? rules.split(' ') : [];
-		rules.push('required');
+  isValid: null,
+  selectedRules: null,
 
-		rules = rules.map(rule => {
-			return this.container.lookupFactory(`validation:${rule}`).validate.bind(this);
-		});
+  targetObject: Ember.computed.alias('parentView'),
 
-		this.set('selectedRules', rules);
-	},
 	setup: Ember.on('didInsertElement', function() {
 		this.sendAction('register', this);
 	}),
-	actions: {
+
+  actions: {
 		checkForValid() {
 			const errors = runValidations(this);
 			if (!errors.length) {
@@ -51,7 +44,24 @@ export default Ember.Mixin.create({
 				errors: null
 			});
 		}
-	}
+	},
+
+
+  init: function() {
+    this._super();
+
+    let rules = this.get('rules');
+    rules = rules ? rules.split(' ') : [];
+    rules.push('required');
+
+    rules = rules.map(rule => {
+      return this.container.lookupFactory(`validation:${rule}`).validate.bind(this);
+    });
+
+    this.set('selectedRules', rules);
+  }
+
+
 });
 
 function runValidations(self) {
