@@ -71,7 +71,7 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 ```hbs
  {{#validated-form action='submit' }}
 
-    {{#validated-area register='register' as |errors valid| }}
+    {{#validated-area as |errors valid| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='firstName'>First Name</label>
@@ -79,8 +79,6 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             class='form-control'
             id='firstName'
             placeholder='first name'
-            action='validate'
-            register='register'
             rules='min-length'
             minLengthValue='3'
             value=firstName
@@ -92,7 +90,7 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
     {{/validated-area}}
 
-    {{#validated-area register='register' as |errors valid| }}
+    {{#validated-area as |errors valid| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='lastName'>Last Name</label>
@@ -100,8 +98,6 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             class='form-control'
             id='lastName'
             placeholder='last name'
-            action='validate'
-            register='register'
             rules='max-length'
             maxLengthValue='6'
             value=lastName
@@ -113,7 +109,7 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
     {{/validated-area}}
 
-    {{#validated-area register='register' as |errors valid| }}
+    {{#validated-area as |errors valid| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='email'>Email</label>
@@ -122,8 +118,6 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             id='email'
             placeholder='email'
             email='email is required'
-            action='validate'
-            register='register'
             rules='email'
             emailMessage='please enter a valid email'
             value=email
