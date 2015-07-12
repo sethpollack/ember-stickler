@@ -1,21 +1,23 @@
 import Ember from 'ember';
+import validatedForm from '../components/validated-form';
+import validatedArea from '../components/validated-area';
 
 export default Ember.Mixin.create({
   isValid: null,
   selectedRules: null,
 
-  targetObject: Ember.computed.alias('parentView'),
-
   setup: Ember.on('didInsertElement', function() {
-    this.sendAction('register', this);
+    const parentForm = this.nearestOfType(validatedForm);
+    parentForm.send('register', this);
   }),
 
   actions: {
     checkForValid() {
       const errors = runValidations(this);
+      const parentArea = this.nearestOfType(validatedArea);
 
       if (!errors.length) {
-        this.sendAction('action', {
+        parentArea.send('setState', {
           valid: true,
           errors: null
         });
@@ -24,18 +26,19 @@ export default Ember.Mixin.create({
 
     validate() {
       const errors = runValidations(this);
+      const parentArea = this.nearestOfType(validatedArea);
 
       if (errors.length) {
         this.set('isValid', false);
 
-        this.sendAction('action', {
+        parentArea.send('setState', {
           valid: false,
           errors: errors
         });
       } else {
         this.set('isValid', true);
 
-        this.sendAction('action', {
+        parentArea.send('setState', {
           valid: true,
           errors: null
         });
@@ -43,9 +46,11 @@ export default Ember.Mixin.create({
     },
 
     reset() {
+      const parentArea = this.nearestOfType(validatedArea);
+
       this.set('isValid', null);
 
-      this.sendAction('action', {
+      parentArea.send('setState', {
         valid: null,
         errors: null
       });

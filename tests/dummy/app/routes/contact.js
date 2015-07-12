@@ -9,6 +9,7 @@ export default Ember.Route.extend({
 			optional: ''
 		});
 	},
+
 	actions: {
 		submit(form) {
 			this.controller.setProperties({
@@ -17,6 +18,7 @@ export default Ember.Route.extend({
 				email: '',
 				optional: ''
 			});
+
 			form.send('resetFields');
 		}
 	}
