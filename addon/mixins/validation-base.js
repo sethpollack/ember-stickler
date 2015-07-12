@@ -1,6 +1,4 @@
 import Ember from 'ember';
-import validatedForm from '../components/validated-form';
-import validatedArea from '../components/validated-area';
 
 const {
   computed,
@@ -9,29 +7,23 @@ const {
   } = Ember;
 
 export default Mixin.create({
-
   isValid: null,
-
   selectedRules: null,
   errorMessages: null,
-
-  required: false,
-
-  register: 'register',
+  isRequired: false,
 
   registerWithParent: on('didInsertElement', function() {
-    this.sendAction('register', this);
+    const register = this.get('register');
+    register(this);
   }),
-
-  targetObject: computed.alias('parentView'),
 
   actions: {
     checkForValid() {
       const errors = runValidations(this);
-      const parentArea = this.nearestOfType(validatedArea);
+      const setState = this.get('setState');
 
       if (!errors.length) {
-        parentArea.send('setState', {
+        setState({
           valid: true,
           errors: null
         });
@@ -40,19 +32,19 @@ export default Mixin.create({
 
     validate() {
       const errors = runValidations(this);
-      const parentArea = this.nearestOfType(validatedArea);
+      const setState = this.get('setState');
 
       if (errors.length) {
         this.set('isValid', false);
 
-        parentArea.send('setState', {
+        setState({
           valid: false,
           errors: errors
         });
       } else {
         this.set('isValid', true);
 
-        parentArea.send('setState', {
+        setState({
           valid: true,
           errors: null
         });
@@ -60,11 +52,11 @@ export default Mixin.create({
     },
 
     reset() {
-      const parentArea = this.nearestOfType(validatedArea);
+      const setState = this.get('setState');
 
       this.set('isValid', null);
 
-      parentArea.send('setState', {
+      setState({
         valid: null,
         errors: null
       });
@@ -79,7 +71,7 @@ export default Mixin.create({
     rules = rules ? rules.split(' ') : [];
 
     if (rules.indexOf('required') !== -1) {
-      this.set('required', true);
+      this.set('isRequired', true);
     }
 
     rules = rules.map(rule => {
@@ -94,7 +86,7 @@ export default Mixin.create({
 function runValidations(self) {
   const value = self.get('value');
 
-  if (!self.get('required') && !value) {
+  if (!self.get('isRequired') && !value) {
     return [];
   }
 

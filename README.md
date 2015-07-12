@@ -36,19 +36,7 @@ For example:
 * `Email`
 * `MinLength`
 * `MaxLength`
-* `Required` (default)
-
-Additionally, you can mark fields as optional with an optional attribute.
-
-```hbs
-  {{validated-input
-    action='validate'
-    value=message
-    rules='minLength'
-    optional=true
-  }}
-
-```
+* `Required`
 
 You can add more rules by creating a `app/validations` directory and adding a 
 file in the following format:
@@ -69,9 +57,9 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 ## Current API:
 
 ```hbs
- {{#validated-form action='submit' }}
+ {{#validated-form action='submit' as |register| }}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='firstName'>First Name</label>
@@ -79,7 +67,9 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             class='form-control'
             id='firstName'
             placeholder='first name'
-            rules='min-length'
+            register=register
+            setState=setState
+            rules='required min-length'
             minLengthValue='3'
             value=firstName
           }}
@@ -90,7 +80,7 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
     {{/validated-area}}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='lastName'>Last Name</label>
@@ -98,7 +88,9 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             class='form-control'
             id='lastName'
             placeholder='last name'
-            rules='max-length'
+            setState=setState
+            register=register
+            rules='required max-length'
             maxLengthValue='6'
             value=lastName
           }}
@@ -109,7 +101,7 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
     {{/validated-area}}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='email'>Email</label>
@@ -117,8 +109,9 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
             class='form-control'
             id='email'
             placeholder='email'
-            email='email is required'
-            rules='email'
+            setState=setState
+            register=register
+            rules='required email'
             emailMessage='please enter a valid email'
             value=email
           }}

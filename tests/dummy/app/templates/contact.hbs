@@ -1,9 +1,9 @@
 <div class='container'>
   <h2>Test Form</h2>
 
- {{#validated-form action='submit'}}
+ {{#validated-form action='submit' as |register| }}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='firstName'>First Name</label>
@@ -11,7 +11,9 @@
             class='form-control'
             id='firstName'
             placeholder='first name'
-            rules='min-length'
+            register=register
+            setState=setState
+            rules='required min-length'
             minLengthValue='3'
             value=firstName
           }}
@@ -22,7 +24,7 @@
 
     {{/validated-area}}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='lastName'>Last Name</label>
@@ -30,7 +32,9 @@
             class='form-control'
             id='lastName'
             placeholder='last name'
-            rules='max-length'
+            setState=setState
+            register=register
+            rules='required max-length'
             maxLengthValue='6'
             value=lastName
           }}
@@ -41,7 +45,7 @@
 
     {{/validated-area}}
 
-    {{#validated-area as |errors valid| }}
+    {{#validated-area as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='email'>Email</label>
@@ -49,8 +53,9 @@
             class='form-control'
             id='email'
             placeholder='email'
-            email='email is required'
-            rules='email'
+            setState=setState
+            register=register
+            rules='required email'
             emailMessage='please enter a valid email'
             value=email
           }}
