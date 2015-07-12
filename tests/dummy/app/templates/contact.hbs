@@ -14,7 +14,7 @@
             action='validate'
             register='register'
             rules='min-length'
-            min-length-value='3'
+            minLengthValue='3'
             value=firstName
           }}
           {{#if errors}}
@@ -35,7 +35,7 @@
             action='validate'
             register='register'
             rules='max-length'
-            max-length-value='6'
+            maxLengthValue='6'
             value=lastName
           }}
           {{#if errors}}
@@ -57,7 +57,7 @@
             action='validate'
             register='register'
             rules='email'
-            email-message='please enter a valid email'
+            emailMessage='please enter a valid email'
             value=email
           }}
           {{#if errors}}

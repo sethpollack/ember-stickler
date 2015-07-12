@@ -3,6 +3,7 @@ import layout from '../templates/components/validated-form';
 
 export default Ember.Component.extend({
   layout: layout,
+
   tagName: 'form',
   attributeBindings: ['role'],
   fields: null,
@@ -18,13 +19,14 @@ export default Ember.Component.extend({
   },
 
   valid: Ember.computed('fields.@each.isValid', function() {
-    return this.get('fields').every((field) => { return field.get('isValid'); } );
+    return this.get('fields').every(field => field.get('isValid'));
   }),
 
   actions: {
     register(params) {
       this.get('fields').push(params);
     },
+
     resetFields() {
       this.get('fields').forEach(field => field.send('reset'));
     }
@@ -32,7 +34,7 @@ export default Ember.Component.extend({
 
   init: function() {
     this._super();
+
     this.set('fields', Ember.A());
   }
-
 });
