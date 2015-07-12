@@ -1,4 +1,5 @@
 export default {
+
   validate() {
     const value = this.get('value');
     const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
@@ -6,8 +7,8 @@ export default {
 
     if (!result) {
       const message = this.getWithDefault('emailMessage', 'A valid email address is required');
-
       return { message: message };
     }
   }
+
 }
