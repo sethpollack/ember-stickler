@@ -1,15 +1,28 @@
 import Ember from 'ember';
 import validatedForm from '../components/validated-form';
 import validatedArea from '../components/validated-area';
+import dasherizedToCamel from '../utils/dasherized-to-camel';
 
-export default Ember.Mixin.create({
+const {
+  computed,
+  on,
+  Mixin
+  } = Ember;
+
+export default Mixin.create({
+
   isValid: null,
-  selectedRules: null,
 
-  setup: Ember.on('didInsertElement', function() {
+  selectedRules: null,
+  errorMessages: null,
+
+
+  required: false,
+
+	setup: on('didInsertElement', function() {
     const parentForm = this.nearestOfType(validatedForm);
     parentForm.send('register', this);
-  }),
+	}),
 
   actions: {
     checkForValid() {
@@ -64,9 +77,16 @@ export default Ember.Mixin.create({
 
     rules = rules ? rules.split(' ') : [];
 
-    rules.unshift('required');
+    if (this.get('required')) {
+      rules.unshift('required');
+    }
 
     rules = rules.map(rule => {
+      let validator = this.container.lookupFactory(`validation:${rule}`);
+      let messageProp = dasherizedToCamel(rule);
+      if (this.get(messageProp)) {
+        rule.errorMessage
+      }
       return this.container.lookupFactory(`validation:${rule}`).validate.bind(this);
     });
 
