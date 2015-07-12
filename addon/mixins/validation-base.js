@@ -1,10 +1,6 @@
 import Ember from 'ember';
-<<<<<<< HEAD
 import validatedForm from '../components/validated-form';
 import validatedArea from '../components/validated-area';
-import dasherizedToCamel from '../utils/dasherized-to-camel';
-=======
->>>>>>> update registration
 
 const {
   computed,
