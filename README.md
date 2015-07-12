@@ -62,7 +62,7 @@ export default {
 ```
 
 The `this` context in all the rules will be the component that the 
-rule is validating allowing access to the value l `const value = this.get('value');` as well 
+rule is validating allowing access to the value `const value = this.get('value');` as well 
 as any other attibutes `const value = this.get('minLengthMessage');`.
 
 
