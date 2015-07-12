@@ -86,7 +86,7 @@ export default Mixin.create({
 function runValidations(self) {
   const value = self.get('value');
 
-  if (!self.get('isRequired') && !value) {
+  if (!self.get('isRequired') && !value) { //change to || and remove !
     return [];
   }
 

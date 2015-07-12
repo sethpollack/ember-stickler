@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
-export function classState([value, trueClass, falseClass, nilClass]) {
+export function classState([value, trueClass, falseClass, initialClass]) {
   if(value === null) {
-    return nilClass || '';
+    return initialClass || '';
   }
 
   return value ? trueClass : falseClass;
