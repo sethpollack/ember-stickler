@@ -1,7 +1,10 @@
 import Ember from 'ember';
+<<<<<<< HEAD
 import validatedForm from '../components/validated-form';
 import validatedArea from '../components/validated-area';
 import dasherizedToCamel from '../utils/dasherized-to-camel';
+=======
+>>>>>>> update registration
 
 const {
   computed,
@@ -16,13 +19,15 @@ export default Mixin.create({
   selectedRules: null,
   errorMessages: null,
 
-
   required: false,
 
-	setup: on('didInsertElement', function() {
-    const parentForm = this.nearestOfType(validatedForm);
-    parentForm.send('register', this);
-	}),
+  register: 'register',
+
+  registerWithParent: on('didInsertElement', function() {
+    this.sendAction('register', this);
+  }),
+
+  targetObject: computed.alias('parentView'),
 
   actions: {
     checkForValid() {
@@ -83,11 +88,7 @@ export default Mixin.create({
 
     rules = rules.map(rule => {
       let validator = this.container.lookupFactory(`validation:${rule}`);
-      let messageProp = dasherizedToCamel(rule);
-      if (this.get(messageProp)) {
-        rule.errorMessage
-      }
-      return this.container.lookupFactory(`validation:${rule}`).validate.bind(this);
+      return validator.validate.bind(this);
     });
 
     this.set('selectedRules', rules);
