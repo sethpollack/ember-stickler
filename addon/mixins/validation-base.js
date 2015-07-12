@@ -82,8 +82,8 @@ export default Mixin.create({
 
     rules = rules ? rules.split(' ') : [];
 
-    if (this.get('required')) {
-      rules.unshift('required');
+    if (rules.indexOf('required') !== -1) {
+      this.set('required', true);
     }
 
     rules = rules.map(rule => {
@@ -98,7 +98,7 @@ export default Mixin.create({
 function runValidations(self) {
   const value = self.get('value');
 
-  if (self.get('optional') && !value) {
+  if (!self.get('required') && !value) {
     return [];
   }
 
