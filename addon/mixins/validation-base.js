@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
 const {
-  computed,
   on,
   Mixin
   } = Ember;
