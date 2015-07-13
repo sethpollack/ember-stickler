@@ -1,1 +1,1 @@
-export { default, firstMessage } from 'stickler/helpers/first-message';
+export { default, firstMessage } from 'ember-stickler/helpers/first-message';
