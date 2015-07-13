@@ -13,9 +13,25 @@ export default Ember.Component.extend({
     e.preventDefault();
     this.get('fields').forEach(field => field.send('validate'));
 
-    if(this.get('valid')) {
-      this.sendAction('action', this);
+    var _this = this;
+    function callbackHandler(promise) {
+      set(_this, 'promise', promise);
+      promise.then(
+        _this._submitResolve.bind(_this),
+        _this._submitReject.bind(_this)
+      );
     }
+
+    if(this.get('valid')) {
+      this.sendAction('action', callbackHandler);
+    }
+
+  },
+
+  submitErrors: null,
+  _submitResolve: function() {},
+  _submitReject: function(errors) {
+    this.set('submitErrors', errors)
   },
 
   valid: Ember.computed('fields.@each.isValid', function() {

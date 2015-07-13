@@ -1,1 +1,1 @@
-export { default } from 'stickler/components/validated-input';
+export { default } from 'ember-stickler/components/validated-input';

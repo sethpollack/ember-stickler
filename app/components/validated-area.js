@@ -1,1 +1,1 @@
-export { default } from 'stickler/components/validated-area';
+export { default } from 'ember-stickler/components/validated-area';
