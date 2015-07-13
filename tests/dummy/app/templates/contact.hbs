@@ -3,7 +3,7 @@
 
  {{#validated-form action='submit' as |register| }}
 
-    {{#validated-area as |setState errors valid state| }}
+    {{#validated-area as |setState errors valid validationState| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='firstName'>First Name</label>

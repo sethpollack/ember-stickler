@@ -12,7 +12,7 @@ export default Component.extend({
   errors: null,
   valid: null,
 
-  state: computed('valid', function() {
+  validationState: computed('valid', function() {
     const valid = this.get('valid');
     let state = {};
 
