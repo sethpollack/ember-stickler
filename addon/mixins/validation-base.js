@@ -10,6 +10,7 @@ export default Mixin.create({
   selectedRules: null,
   errorMessages: null,
   isRequired: false,
+  _isWrapperComponent: false,
 
   registerWithParent: on('didInsertElement', function() {
     const register = this.get('register');
@@ -31,7 +32,8 @@ export default Mixin.create({
 
     validate() {
       const errors = runValidations(this);
-      const setState = this.get('setState');
+      const isWrapper = this.get('_isWrapperComponent');
+      const setState = isWrapper ? this.setState.bind(this) : this.get('setState');
 
       if (errors.length) {
         this.set('isValid', false);
@@ -84,6 +86,7 @@ export default Mixin.create({
 
 function runValidations(self) {
   const value = self.get('value');
+  let errors = Ember.A();
 
   if (!self.get('isRequired') && !value) { //change to || and remove !
     return [];
@@ -91,6 +94,6 @@ function runValidations(self) {
 
   const rules = self.get('selectedRules');
 
-  return rules.map(rule => rule())
-    .filter(rule => !!rule);
+  rules.forEach(rule => rule(value, errors));
+  return errors;
 }
