@@ -1,68 +1,96 @@
 import Ember from 'ember';
 
-export default Ember.Mixin.create({
-	targetObject: Ember.computed.alias('parentView'),
-	setup: Ember.on('didInsertElement', function() {
-	  this.sendAction('register', this);
-	}),
-	actions: {
+const {
+  on,
+  Mixin
+  } = Ember;
+
+export default Mixin.create({
+  isValid: null,
+  selectedRules: null,
+  errorMessages: null,
+  isRequired: false,
+
+  registerWithParent: on('didInsertElement', function() {
+    const register = this.get('register');
+    register(this);
+  }),
+
+  actions: {
     checkForValid() {
       const errors = runValidations(this);
+      const setState = this.get('setState');
+
       if (!errors.length) {
-        this.sendAction('action', {
+        setState({
           valid: true,
           errors: null
         });
       }
     },
+
     validate() {
       const errors = runValidations(this);
+      const setState = this.get('setState');
+
       if (errors.length) {
         this.set('isValid', false);
-        this.sendAction('action', {
+
+        setState({
           valid: false,
           errors: errors
         });
       } else {
         this.set('isValid', true);
-        this.sendAction('action', {
+
+        setState({
           valid: true,
           errors: null
         });
       }
     },
+
     reset() {
+      const setState = this.get('setState');
+
       this.set('isValid', null);
-      this.sendAction('action', {
+
+      setState({
         valid: null,
         errors: null
       });
     }
-	},
-	baseRules: {
-		required(self, value) {
-		  if (!value.length) {
-		    return { message: self.get('required') || 'this field is required'};
-		  }
-		}
-	}
+  },
+
+  init: function() {
+    this._super();
+
+    let rules = this.get('rules');
+
+    rules = rules ? rules.split(' ') : [];
+
+    if (rules.indexOf('required') !== -1) {
+      this.set('isRequired', true);
+    }
+
+    rules = rules.map(rule => {
+      let validator = this.container.lookupFactory(`validation:${rule}`);
+      return validator.validate.bind(this);
+    });
+
+    this.set('selectedRules', rules);
+  }
 });
 
 function runValidations(self) {
   const value = self.get('value');
 
-  if (self.get('optional') && !value) {
+  if (!self.get('isRequired') && !value) { //change to || and remove !
     return [];
   }
 
-  const rules = Ember.merge(self.get('baseRules'), self.get('rules'));
+  const rules = self.get('selectedRules');
 
-  let selectedValidations = Object.keys(rules)
-    .filter(key => !!self.get(key));
-
-  selectedValidations.push('required');
-
-  return selectedValidations
-    .map(v => rules[v](self, value))
-    .filter(v => !!v);
+  return rules.map(rule => rule())
+    .filter(rule => !!rule);
 }

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 
 moduleForComponent('validated-area', 'Unit | Component | validated area', {
@@ -6,14 +7,46 @@ moduleForComponent('validated-area', 'Unit | Component | validated area', {
   unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(2);
+test('#validationState', function(assert) {
+  assert.expect(3);
 
-  // Creates the component instance
-  var component = this.subject();
-  assert.equal(component._state, 'preRender');
+  const component = this.subject();
 
-  // Renders the component to the page
   this.render();
-  assert.equal(component._state, 'inDOM');
+
+  assert.deepEqual(component.get('validationState'), {
+    isValid: false,
+    isInvalid: false,
+    isInitial: true,
+    text: 'initial'
+  });
+
+  Ember.run(function() {
+    component.send('setState', {
+      errors: null,
+      valid: true
+    });
+  });
+
+  assert.deepEqual(component.get('validationState'), {
+    isValid: true,
+    isInvalid: false,
+    isInitial: false,
+    text: 'valid'
+  });
+
+  Ember.run(function() {
+    component.send('setState', {
+      errors: [],
+      valid: false
+    });
+  });
+
+  assert.deepEqual(component.get('validationState'), {
+    isValid: false,
+    isInvalid: true,
+    isInitial: false,
+    text: 'invalid'
+  });
 });
+

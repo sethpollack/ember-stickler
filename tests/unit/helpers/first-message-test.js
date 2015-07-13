@@ -3,8 +3,8 @@ import { module, test } from 'qunit';
 
 module('Unit | Helper | first message');
 
-// Replace this with your real tests.
 test('it works', function(assert) {
-  var result = firstMessage(42);
-  assert.ok(result);
+	const errors = [{ message: 'foo' }, { message: 'bar' }];
+  const result = firstMessage([errors]);
+  assert.equal(result, 'foo');
 });
