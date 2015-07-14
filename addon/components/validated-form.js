@@ -1,7 +1,13 @@
 import Ember from 'ember';
 import layout from '../templates/components/validated-form';
 
-export default Ember.Component.extend({
+const {
+  computed,
+  Component,
+  set: set
+  } = Ember;
+
+export default Component.extend({
   layout: layout,
 
   tagName: 'form',
@@ -24,18 +30,43 @@ export default Ember.Component.extend({
   },
 
   submitErrors: null,
+
   _submitResolve: function() {
     this.set('submitErrors', null);
+    console.log('setting promise state to resolved');
+    this.set('_promiseState', 'resolved');
   },
   _submitReject: function(errors) {
     this.set('submitErrors', errors);
+    console.log('setting promise state to rejected');
+    this.set('_promiseState', 'rejected');
   },
 
-  isValid: Ember.computed('fields.@each.valid', function() {
+  _promiseState: 'default',
+
+  disableDuringSubmit: true,
+  formState: computed('isValid', '_promiseState', function() {
+    const state = this.get('_promiseState');
+    const isValid = this.get('isValid');
+    const disableDuringSubmit = this.get('disableDuringSubmit');
+
+    return {
+      isDefault: state === 'default',
+      isPending: state === 'pending',
+      isResolved: state === 'resolved',
+      isRejected: state === 'rejected',
+      disabled: !isValid || (disableDuringSubmit && state === 'pending'),
+      text: state
+    };
+
+  }),
+
+  isValid: computed('fields.@each.valid', function() {
     return this.get('fields').every(field => field.get('valid'));
   }),
 
   actions: {
+
     register(params) {
       this.get('fields').push(params);
     },
@@ -47,27 +78,33 @@ export default Ember.Component.extend({
       const reset = this.resetFields.bind(this);
       var _this = this;
       function callbackHandler(promise) {
-        _this.set('promise', promise);
+
+        console.log('setting promise state to pending');
+        set(_this, '_promiseState', 'pending');
+
         promise.then(
           _this._submitResolve.bind(_this),
           _this._submitReject.bind(_this)
         );
+
       }
 
       if(this.get('isValid')) {
         this.sendAction('action', reset, callbackHandler);
       }
 
+      return false;
+
     },
 
     reset() {
       this.get('fields').forEach(field => field.send('reset'));
+      this.set('_promiseState', 'default');
     }
   },
 
   init: function() {
     this._super();
-
     this.set('fields', Ember.A());
   }
 });

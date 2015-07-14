@@ -1,7 +1,7 @@
 <div class='container'>
   <h2>Test Form</h2>
 
- {{#validated-form as |register submit reset submitErrors| }}
+ {{#validated-form disableDuringSubmit=true as |register submit reset formState submitErrors| }}
 
     {{#validated-area
       submitErrors=submitErrors.firstName
@@ -76,7 +76,7 @@
       {{input value=optional placeholder='optional field' class='form-control' id='optional'}}
     </div>
 
-    <button class='btn btn-primary' type="submit">Submit</button>
+    <button class='btn btn-primary' disabled={{formState.disabled}} {{action submit}}>Submit</button>
 
  {{/validated-form}}
 

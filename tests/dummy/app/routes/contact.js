@@ -17,25 +17,29 @@ export default Ember.Route.extend({
 	actions: {
 		submit(reset, callback) {
 
+      console.log('submit occurred :/');
+
       var _this = this;
       var promise = new Ember.RSVP.Promise(function(resolve, reject) {
 
-        var status = didFail();
-        if (!status) {
-          _this.controller.setProperties({
-            firstName: '',
-            lastName: '',
-            email: '',
-            optional: ''
-          });
-          reset();
-          resolve();
-        } else {
-          reject({
-            firstName: ['That firstname is too fake!'],
-            email: ['That email is bozo!']
-          });
-        }
+        Ember.run.later(_this, function() {
+          var status = didFail();
+          if (!status) {
+            this.controller.setProperties({
+              firstName: '',
+              lastName: '',
+              email: '',
+              optional: ''
+            });
+            reset();
+            resolve();
+          } else {
+            reject({
+              firstName: ['That firstname is too fake!'],
+              email: ['That email is bozo!']
+            });
+          }
+        }, 5000);
 
       });
 

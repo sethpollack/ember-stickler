@@ -7,14 +7,10 @@ const {
   } = Ember;
 
 export default Mixin.create({
+
   valid: null,
   selectedRules: null,
   isRequired: false,
-
-  registerWithParent: on('didInsertElement', function() {
-    const register = this.get('register');
-    register(this);
-  }),
 
   actions: {
     checkForValid() {
@@ -66,6 +62,7 @@ export default Mixin.create({
     this._super();
 
     let rules = this.get('rules');
+    const register = this.get('register');
 
     rules = rules ? rules.split(' ') : [];
 
@@ -79,5 +76,7 @@ export default Mixin.create({
     });
 
     this.set('selectedRules', rules);
+
+    register(this);
   }
 });
