@@ -12,6 +12,7 @@ export default Mixin.create({
   selectedRules: null,
   isRequired: false,
 
+  register: null,
   actions: {
     checkForValid() {
       const errors = runValidations(this);

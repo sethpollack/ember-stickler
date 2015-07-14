@@ -1,12 +1,12 @@
 import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('validated-input', 'Unit | Component | validated input', {
+moduleForComponent('validation-wrapper', 'Unit | Component | validation wrapper', {
   needs: ['validation:required', 'validation:email'],
   unit: true
 });
 
-test('registers component on #didInsertElement', function(assert) {
+test('registers component on init', function(assert) {
   assert.expect(1);
 
   const component = this.subject();
@@ -15,7 +15,7 @@ test('registers component on #didInsertElement', function(assert) {
     assert.equal(params, component);
   });
 
-  this.render();
+  component.trigger('init');
 });
 
 test('loads rules on #init', function(assert) {
@@ -28,11 +28,9 @@ test('loads rules on #init', function(assert) {
   component.set('setState', function(params) {
     assert.deepEqual(params, {
       valid: false,
-      errors: [{ message: 'This field is required' }]
+      errors: ['This field is required']
     });
   });
-
-  component.trigger('init');
 
   this.render();
 
@@ -118,21 +116,24 @@ test('#reset', function(assert) {
   assert.expect(2);
 
   const component = this.subject();
+  const outer = { registered: false, fields: [] };
 
   Ember.run(function() {
     component.set('rules', 'required');
     component.set('value', '');
-    component.set('register', function() {});
+    component.set('register', function(context) {
+      outer.registered = true;
+      outer.fields.push(context);
+    });
     component.set('setState', function(params) {
       assert.deepEqual(params, {
         valid: false,
-        errors: [{ message: 'This field is required' }]
+        errors: ['This field is required']
       });
     });
   });
 
   component.trigger('init');
-
   this.render();
 
   component.send('validate');
