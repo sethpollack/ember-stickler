@@ -12,18 +12,23 @@ export default Component.extend({
 
   submitErrors: null,
   errors: null,
+  valid: null,
+
   totalErrors: computed('submitErrors', 'errors', function() {
     let submitErrors = this.get('submitErrors') || [];
     let errors = this.get('errors') || [];
-    var total = [].concat(submitErrors).concat(errors);
+
+    let total = [].concat(submitErrors).concat(errors);
+
     if (total.length) {
       if (this.get('valid') !== false) {
         run.next(this, this.set, 'valid', false);
       }
     }
+
     return total;
   }),
-  valid: null,
+
 
   validationState: computed('valid', function() {
     const valid = this.get('valid');

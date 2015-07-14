@@ -10,11 +10,12 @@ const {
   } = Ember;
 
 export default ValidatedArea.extend(ValidationBase, {
-
   layout: layout,
+
   value: null,
 
   _isInitialized: false,
+
   _setValueInitialization: on('didInsertElement', function() {
     this.set('_isInitialized', true);
   }),
@@ -30,7 +31,6 @@ export default ValidatedArea.extend(ValidationBase, {
   },
 
   actions: {
-
     change(v) {
       this.set('value', v);
     },

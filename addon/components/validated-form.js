@@ -14,37 +14,34 @@ export default Component.extend({
   attributeBindings: ['role'],
   fields: null,
   role: null,
-
+  submitErrors: null,
   action: 'submit',
+  disableDuringSubmit: true,
+
+  _promiseState: 'default',
 
   resetFields: function() {
     this.send('reset');
   },
 
   submit(e) {
-
     e.preventDefault();
+
     this.send('submit');
+
     return false;
-
   },
-
-  submitErrors: null,
 
   _submitResolve: function() {
     this.set('submitErrors', null);
-    console.log('setting promise state to resolved');
     this.set('_promiseState', 'resolved');
   },
+
   _submitReject: function(errors) {
     this.set('submitErrors', errors);
-    console.log('setting promise state to rejected');
     this.set('_promiseState', 'rejected');
   },
 
-  _promiseState: 'default',
-
-  disableDuringSubmit: true,
   formState: computed('isValid', '_promiseState', function() {
     const state = this.get('_promiseState');
     const isValid = this.get('isValid');
@@ -66,27 +63,23 @@ export default Component.extend({
   }),
 
   actions: {
-
     register(params) {
       this.get('fields').push(params);
     },
 
     submit() {
-
       this.get('fields').forEach(field => field.send('validate'));
 
       const reset = this.resetFields.bind(this);
-      var _this = this;
-      function callbackHandler(promise) {
+      let _this = this;
 
-        console.log('setting promise state to pending');
+      function callbackHandler(promise) {
         set(_this, '_promiseState', 'pending');
 
         promise.then(
           _this._submitResolve.bind(_this),
           _this._submitReject.bind(_this)
         );
-
       }
 
       if(this.get('isValid')) {
@@ -94,7 +87,6 @@ export default Component.extend({
       }
 
       return false;
-
     },
 
     reset() {

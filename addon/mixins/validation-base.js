@@ -6,11 +6,9 @@ const {
   } = Ember;
 
 export default Mixin.create({
-
   valid: null,
   selectedRules: null,
   isRequired: false,
-
   register: null,
 
   actions: {

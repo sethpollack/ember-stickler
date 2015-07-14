@@ -57,74 +57,139 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 ## Current API:
 
 ```hbs
- {{#validated-form action='submit' as |register| }}
+{{#validated-form disableDuringSubmit=true as |register submit reset formState submitErrors| }}
 
-    {{#validated-area as |setState errors valid state| }}
 
-        <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
-          <label for='firstName'>First Name</label>
-          {{validated-input
-            class='form-control'
-            id='firstName'
-            placeholder='first name'
-            register=register
-            setState=setState
-            rules='required min-length'
-            minLengthValue='3'
-            value=firstName
-          }}
-          {{#if errors}}
-            <span>{{first-message errors}}</span>
-          {{/if}}
-        </div>
+  {{#validation-wrapper
+   class="input-group"
+   value=intensity
+   register=register
+   rules="exists is-eleven"
+   as |level change errors valid|
+  }}
+      <label for="intensity">Department To Route Campaign Responses To</label>
+      <input type="range"
+             id="intensity"
+             value={{level}}
+             min=0
+             max=11
+             oninput={{action change value="target.value"}}>
 
-    {{/validated-area}}
+    {{#if errors}}
+        <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+    {{/if}}
+  {{/validation-wrapper}}
 
-    {{#validated-area as |setState errors valid state| }}
 
-        <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
-          <label for='lastName'>Last Name</label>
-          {{validated-input
-            class='form-control'
-            id='lastName'
-            placeholder='last name'
-            setState=setState
-            register=register
-            rules='required max-length'
-            maxLengthValue='6'
-            value=lastName
-          }}
-          {{#if errors}}
-            <span>{{first-message errors}}</span>
-          {{/if}}
-        </div>
+  {{#validation-wrapper
+    class="input-group"
+    value=isIntense
+    register=register
+    rules="exists"
+    as |isIntense change errors valid|
+  }}
+      <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
+      <input type="checkbox"
+             id="checkbox-intensity"
+             value={{isIntense}}
+             onchange={{action change value="target.checked"}} >
 
-    {{/validated-area}}
+    {{#if errors}}
+        <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+    {{/if}}
+  {{/validation-wrapper}}
 
-    {{#validated-area as |setState errors valid state| }}
 
-        <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
-          <label for='email'>Email</label>
-          {{validated-input
-            class='form-control'
-            id='email'
-            placeholder='email'
-            setState=setState
-            register=register
-            rules='required email'
-            emailMessage='please enter a valid email'
-            value=email
-          }}
-          {{#if errors}}
-            <span>{{first-message errors}}</span>
-          {{/if}}
-        </div>
+  {{#validation-wrapper
+    class="input-group"
+    value=coolness
+    register=register
+    rules="exists is-eleven"
+    as |coolFactor change errors valid|
+  }}
+      <label for="intensity">Department To Route Campaign Responses To</label>
+      <select onchange={{action change value="target.value"}}>
+        {{#each choices key="@identity" as |choice|}}
+            <option value={{choice}} selected={{is-equal coolFactor choice}}>{{choice}}</option>
+        {{/each}}
+      </select>
 
-    {{/validated-area}}
+    {{#if errors}}
+        <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+    {{/if}}
+  {{/validation-wrapper}}
 
-    <button class='btn btn-primary'>Submit</button>
 
- {{/validated-form}}
+  {{#validated-area
+     submitErrors=submitErrors.firstName
+     as |setState errors valid validationState| }}
+
+       <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
+         <label for='firstName'>First Name</label>
+         {{validated-input
+           class='form-control'
+           id='firstName'
+           placeholder='first name'
+           register=register
+           setState=setState
+           rules='required min-length'
+           minLengthValue='3'
+           value=firstName
+         }}
+         {{#if errors}}
+           <span>{{first-message errors}}</span>
+         {{/if}}
+       </div>
+
+   {{/validated-area}}
+
+   {{#validated-area as |setState errors valid state| }}
+
+       <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
+         <label for='lastName'>Last Name</label>
+         {{validated-input
+           class='form-control'
+           id='lastName'
+           placeholder='last name'
+           setState=setState
+           register=register
+           rules='required max-length'
+           maxLengthValue='6'
+           value=lastName
+         }}
+         {{#if errors}}
+           <span>{{first-message errors}}</span>
+         {{/if}}
+       </div>
+
+   {{/validated-area}}
+
+   {{#validated-area
+     submitErrors=submitErrors.email
+     as |setState errors valid state| }}
+
+       <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
+         <label for='email'>Email</label>
+         {{validated-input
+           class='form-control'
+           id='email'
+           placeholder='email'
+           setState=setState
+           register=register
+           rules='required email'
+           emailMessage='please enter a valid email'
+           value=email
+         }}
+         {{#if errors}}
+           <span>{{first-message errors}}</span>
+         {{/if}}
+       </div>
+
+   {{/validated-area}}
+
+   <button class='btn btn-primary' disabled={{formState.disabled}} {{action submit}}>Submit</button>
+
+{{/validated-form}}
 
 ```
 
