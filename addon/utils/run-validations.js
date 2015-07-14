@@ -1,6 +1,6 @@
 export default function runValidations(self) {
   const value = self.get('value');
-  let errors = Ember.A();
+  let errors = [];
 
   if (!self.get('isRequired') && !value) { //change to || and remove !
     return [];

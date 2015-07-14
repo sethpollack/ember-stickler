@@ -9,7 +9,13 @@ const {
 export default Component.extend({
   layout: layout,
 
+  submitErrors: null,
   errors: null,
+  totalErrors: computed('submitErrors', 'errors', function() {
+    const submitErrors = this.get('submitErrors') || [];
+    const errors = this.get('errors') || [];
+    return [].concat(submitErrors).concat(errors);
+  }),
   valid: null,
 
   validationState: computed('valid', function() {

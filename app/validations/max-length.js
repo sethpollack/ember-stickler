@@ -5,7 +5,7 @@ export default {
 
     if (!value || value.length > parseInt(length)) {
       const message = this.getWithDefault('maxLengthMessage', `Max length of ${length} allowed`);
-      messages.addObject({ message: message });
+      messages.push(message);
       return false;
     }
     return true;

@@ -4,7 +4,7 @@
  {{#validated-form as |register submit reset submitErrors| }}
 
     {{#validated-area
-      errors=(mut submitErrors.firstName)
+      submitErrors=submitErrors.firstName
       as |setState errors valid validationState| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
@@ -48,7 +48,7 @@
     {{/validated-area}}
 
     {{#validated-area
-      errors=(mut submitErrors.email)
+      submitErrors=submitErrors.email
       as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">

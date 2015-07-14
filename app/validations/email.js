@@ -6,7 +6,7 @@ export default {
 
     if (!result) {
       const message = this.getWithDefault('emailMessage', 'A valid email address is required');
-      messages.addObject({ message: message });
+      messages.push(message);
       return false;
     }
     return true;

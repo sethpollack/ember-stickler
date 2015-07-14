@@ -32,8 +32,8 @@ export default Ember.Route.extend({
           resolve();
         } else {
           reject({
-            firstName: [{ message: 'That firstname is too fake!'}],
-            email: [{ message: 'That email is bozo!'}]
+            firstName: ['That firstname is too fake!'],
+            email: ['That email is bozo!']
           });
         }
 
