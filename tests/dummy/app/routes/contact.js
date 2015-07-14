@@ -11,15 +11,18 @@ export default Ember.Route.extend({
 	},
 
 	actions: {
-		submit(form) {
-			this.controller.setProperties({
+		submit(reset) {
+
+      this.controller.setProperties({
 				firstName: '',
 				lastName: '',
 				email: '',
 				optional: ''
 			});
 
-			form.send('resetFields');
+			reset();
+
+      return { hello: 'world' };
 		}
 	}
 });

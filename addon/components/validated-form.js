@@ -9,33 +9,30 @@ export default Ember.Component.extend({
   fields: null,
   role: null,
 
+  action: 'submit',
+
+  resetFields: function() {
+    this.get('fields').forEach(field => field.send('reset'));
+  },
+
   submit(e) {
+
     e.preventDefault();
-    this.get('fields').forEach(field => field.send('validate'));
-
-    var _this = this;
-    function callbackHandler(promise) {
-      set(_this, 'promise', promise);
-      promise.then(
-        _this._submitResolve.bind(_this),
-        _this._submitReject.bind(_this)
-      );
-    }
-
-    if(this.get('valid')) {
-      this.sendAction('action', callbackHandler);
-    }
+    this.send('submit');
+    return false;
 
   },
 
   submitErrors: null,
-  _submitResolve: function() {},
+  _submitResolve: function() {
+    this.set('submitErrors', null);
+  },
   _submitReject: function(errors) {
-    this.set('submitErrors', errors)
+    this.set('submitErrors', errors);
   },
 
-  valid: Ember.computed('fields.@each.isValid', function() {
-    return this.get('fields').every(field => field.get('isValid'));
+  valid: Ember.computed('fields.@each.valid', function() {
+    return this.get('fields').every(field => field.get('valid'));
   }),
 
   actions: {
@@ -43,8 +40,24 @@ export default Ember.Component.extend({
       this.get('fields').push(params);
     },
 
-    resetFields() {
-      this.get('fields').forEach(field => field.send('reset'));
+    submit() {
+
+      this.get('fields').forEach(field => field.send('validate'));
+
+      const reset = this.resetFields.bind(this);
+      var _this = this;
+      function callbackHandler(promise) {
+        this.set(_this, 'promise', promise);
+        promise.then(
+          _this._submitResolve.bind(_this),
+          _this._submitReject.bind(_this)
+        );
+      }
+
+      if(this.get('valid')) {
+        this.sendAction('action', reset, callbackHandler);
+      }
+
     }
   },
 
