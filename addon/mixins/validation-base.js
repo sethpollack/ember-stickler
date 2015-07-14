@@ -7,7 +7,7 @@ const {
   } = Ember;
 
 export default Mixin.create({
-  isValid: null,
+  valid: null,
   selectedRules: null,
   isRequired: false,
 
@@ -34,14 +34,14 @@ export default Mixin.create({
       const setState = this.get('setState');
 
       if (errors.length) {
-        this.set('isValid', false);
+        this.set('valid', false);
 
         setState({
           valid: false,
           errors: errors
         });
       } else {
-        this.set('isValid', true);
+        this.set('valid', true);
 
         setState({
           valid: true,
@@ -53,7 +53,7 @@ export default Mixin.create({
     reset() {
       const setState = this.get('setState');
 
-      this.set('isValid', null);
+      this.set('valid', null);
 
       setState({
         valid: null,

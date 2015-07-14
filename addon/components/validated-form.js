@@ -31,7 +31,7 @@ export default Ember.Component.extend({
     this.set('submitErrors', errors);
   },
 
-  valid: Ember.computed('fields.@each.valid', function() {
+  isValid: Ember.computed('fields.@each.valid', function() {
     return this.get('fields').every(field => field.get('valid'));
   }),
 
@@ -54,7 +54,7 @@ export default Ember.Component.extend({
         );
       }
 
-      if(this.get('valid')) {
+      if(this.get('isValid')) {
         this.sendAction('action', reset, callbackHandler);
       }
 
