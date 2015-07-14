@@ -10,6 +10,8 @@ const {
   } = Ember;
 
 export default ValidatedArea.extend(ValidationBase, {
+
+  layout: layout,
   value: null,
 
   _isInitialized: false,
@@ -22,6 +24,10 @@ export default ValidatedArea.extend(ValidationBase, {
       this.send('validate');
     }
   }),
+
+  setState: function(params) {
+    this.setProperties(params);
+  },
 
   actions: {
     checkForValid() {

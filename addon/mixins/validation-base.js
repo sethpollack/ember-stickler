@@ -2,7 +2,6 @@ import Ember from 'ember';
 import runValidations from '../utils/run-validations';
 
 const {
-  on,
   Mixin
   } = Ember;
 
@@ -13,6 +12,7 @@ export default Mixin.create({
   isRequired: false,
 
   register: null,
+
   actions: {
     checkForValid() {
       const errors = runValidations(this);
@@ -67,7 +67,7 @@ export default Mixin.create({
 
     rules = rules ? rules.split(' ') : [];
 
-    if (rules.indexOf('required') !== -1) {
+    if (rules.indexOf('required') !== -1 || rules.indexOf('exists') !== -1) {
       this.set('isRequired', true);
     }
 
