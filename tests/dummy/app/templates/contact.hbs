@@ -1,9 +1,11 @@
 <div class='container'>
   <h2>Test Form</h2>
 
- {{#validated-form as |register| }}
+ {{#validated-form as |register submit reset submitErrors| }}
 
-    {{#validated-area as |setState errors valid validationState| }}
+    {{#validated-area
+      errors=(mut submitErrors.firstName)
+      as |setState errors valid validationState| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='firstName'>First Name</label>
@@ -45,7 +47,9 @@
 
     {{/validated-area}}
 
-    {{#validated-area as |setState errors valid state| }}
+    {{#validated-area
+      errors=(mut submitErrors.email)
+      as |setState errors valid state| }}
 
         <div class="form-group {{class-state valid 'has-success' 'has-error'}}">
           <label for='email'>Email</label>

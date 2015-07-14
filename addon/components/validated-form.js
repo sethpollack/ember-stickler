@@ -12,7 +12,7 @@ export default Ember.Component.extend({
   action: 'submit',
 
   resetFields: function() {
-    this.get('fields').forEach(field => field.send('reset'));
+    this.send('reset');
   },
 
   submit(e) {
@@ -47,7 +47,7 @@ export default Ember.Component.extend({
       const reset = this.resetFields.bind(this);
       var _this = this;
       function callbackHandler(promise) {
-        this.set(_this, 'promise', promise);
+        _this.set('promise', promise);
         promise.then(
           _this._submitResolve.bind(_this),
           _this._submitReject.bind(_this)
@@ -58,6 +58,10 @@ export default Ember.Component.extend({
         this.sendAction('action', reset, callbackHandler);
       }
 
+    },
+
+    reset() {
+      this.get('fields').forEach(field => field.send('reset'));
     }
   },
 

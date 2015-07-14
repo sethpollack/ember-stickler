@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+function didFail() {
+  return Math.round(Math.random());
+}
+
 export default Ember.Route.extend({
 	setupController(controller) {
 		controller.setProperties({
@@ -11,18 +15,31 @@ export default Ember.Route.extend({
 	},
 
 	actions: {
-		submit(reset) {
+		submit(reset, callback) {
 
-      this.controller.setProperties({
-				firstName: '',
-				lastName: '',
-				email: '',
-				optional: ''
-			});
+      var _this = this;
+      var promise = new Ember.RSVP.Promise(function(resolve, reject) {
 
-			reset();
+        var status = didFail();
+        if (!status) {
+          _this.controller.setProperties({
+            firstName: '',
+            lastName: '',
+            email: '',
+            optional: ''
+          });
+          reset();
+          resolve();
+        } else {
+          reject({
+            firstName: [{ message: 'That firstname is too fake!'}],
+            email: [{ message: 'That email is bozo!'}]
+          });
+        }
 
-      return { hello: 'world' };
+      });
+
+      callback(promise);
 		}
 	}
 });
