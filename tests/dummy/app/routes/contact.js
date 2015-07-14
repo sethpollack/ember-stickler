@@ -10,7 +10,11 @@ export default Ember.Route.extend({
 			firstName: '',
 			lastName: '',
 			email: '',
-			optional: ''
+			optional: '',
+      isIntense: false,
+      intensity: 3,
+      choices: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      coolness: 2
 		});
 	},
 
@@ -29,7 +33,10 @@ export default Ember.Route.extend({
               firstName: '',
               lastName: '',
               email: '',
-              optional: ''
+              optional: '',
+              isIntense: false,
+              intensity: 3,
+              coolness: 2
             });
             reset();
             resolve();
@@ -39,7 +46,7 @@ export default Ember.Route.extend({
               email: ['That email is bozo!']
             });
           }
-        }, 5000);
+        }, 1000);
 
       });
 

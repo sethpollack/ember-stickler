@@ -3,7 +3,68 @@
 
  {{#validated-form disableDuringSubmit=true as |register submit reset formState submitErrors| }}
 
-    {{#validated-area
+
+   {{#validation-wrapper
+    class="input-group"
+    value=intensity
+    register=register
+    rules="exists is-eleven"
+    as |level change errors valid|
+   }}
+       <label for="intensity">Department To Route Campaign Responses To</label>
+       <input type="range"
+              id="intensity"
+              value={{level}}
+              min=0
+              max=11
+              oninput={{action change value="target.value"}}>
+
+     {{#if errors}}
+         <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+     {{/if}}
+   {{/validation-wrapper}}
+
+
+   {{#validation-wrapper
+     class="input-group"
+     value=isIntense
+     register=register
+     rules="exists"
+     as |isIntense change errors valid|
+   }}
+       <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
+       <input type="checkbox"
+              id="checkbox-intensity"
+              value={{isIntense}}
+              onchange={{action change value="target.checked"}} >
+
+     {{#if errors}}
+         <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+     {{/if}}
+   {{/validation-wrapper}}
+
+
+   {{#validation-wrapper
+     class="input-group"
+     value=coolness
+     register=register
+     rules="exists is-eleven"
+     as |coolFactor change errors valid|
+   }}
+       <label for="intensity">Department To Route Campaign Responses To</label>
+       <select onchange={{action change value="target.value"}}>
+         {{#each choices key="@identity" as |choice|}}
+             <option value={{choice}} selected={{is-equal coolFactor choice}}>{{choice}}</option>
+         {{/each}}
+       </select>
+
+     {{#if errors}}
+         <div class="col-xs-12 text-small text-danger">{{first-message errors}}</div>
+     {{/if}}
+   {{/validation-wrapper}}
+
+
+   {{#validated-area
       submitErrors=submitErrors.firstName
       as |setState errors valid validationState| }}
 

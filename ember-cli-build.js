@@ -13,5 +13,8 @@ module.exports = function(defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
+  app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+  app.import('bower_components/bootstrap/dist/css/bootstrap.css');
+
   return app.toTree();
 };

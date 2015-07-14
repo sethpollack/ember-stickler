@@ -30,6 +30,11 @@ export default ValidatedArea.extend(ValidationBase, {
   },
 
   actions: {
+
+    change(v) {
+      this.set('value', v);
+    },
+
     checkForValid() {
       const errors = runValidations(this);
 
