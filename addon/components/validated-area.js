@@ -12,6 +12,15 @@ export default Component.extend({
   errors: null,
   valid: null,
 
+  changedErrors: computed('errors', function() {
+    const errors = this.get('errors');
+    const valid = this.get('valid');
+
+    if(errors.length && valid) {
+      this.set('valid', false);
+    }
+  }),
+
   validationState: computed('valid', function() {
     const valid = this.get('valid');
     let state = {};
