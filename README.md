@@ -43,8 +43,10 @@ file in the following format:
 
 ```javascript
 export default {
-  validate() {
+  validate(value, messages) {
     // add rule logic here
+    // push errors to messages
+    // return true or false
   }
 }
 ```
