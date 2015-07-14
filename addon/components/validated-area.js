@@ -3,7 +3,8 @@ import layout from '../templates/components/validated-area';
 
 const {
   Component,
-  computed
+  computed,
+  run
   } = Ember;
 
 export default Component.extend({
@@ -12,20 +13,17 @@ export default Component.extend({
   submitErrors: null,
   errors: null,
   totalErrors: computed('submitErrors', 'errors', function() {
-    const submitErrors = this.get('submitErrors') || [];
-    const errors = this.get('errors') || [];
-    return [].concat(submitErrors).concat(errors);
+    let submitErrors = this.get('submitErrors') || [];
+    let errors = this.get('errors') || [];
+    var total = [].concat(submitErrors).concat(errors);
+    if (total.length) {
+      if (this.get('valid') !== false) {
+        run.next(this, this.set, 'valid', false);
+      }
+    }
+    return total;
   }),
   valid: null,
-
-  changedErrors: computed('errors', function() {
-    const errors = this.get('errors');
-    const valid = this.get('valid');
-
-    if(errors.length && valid) {
-      this.set('valid', false);
-    }
-  }),
 
   validationState: computed('valid', function() {
     const valid = this.get('valid');
