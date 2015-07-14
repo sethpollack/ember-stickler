@@ -6,11 +6,10 @@ const {
   } = Ember;
 
 export default Mixin.create({
-  isValid: null,
+  valid: null,
   selectedRules: null,
   errorMessages: null,
   isRequired: false,
-  _isWrapperComponent: false,
 
   registerWithParent: on('didInsertElement', function() {
     const register = this.get('register');
@@ -32,18 +31,17 @@ export default Mixin.create({
 
     validate() {
       const errors = runValidations(this);
-      const isWrapper = this.get('_isWrapperComponent');
-      const setState = isWrapper ? this.setState.bind(this) : this.get('setState');
+      const setState = this.get('setState');
 
       if (errors.length) {
-        this.set('isValid', false);
+        this.set('valid', false);
 
         setState({
           valid: false,
           errors: errors
         });
       } else {
-        this.set('isValid', true);
+        this.set('valid', true);
 
         setState({
           valid: true,
@@ -55,7 +53,7 @@ export default Mixin.create({
     reset() {
       const setState = this.get('setState');
 
-      this.set('isValid', null);
+      this.set('valid', null);
 
       setState({
         valid: null,

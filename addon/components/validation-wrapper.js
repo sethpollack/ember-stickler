@@ -25,11 +25,11 @@ export default Component.extend(ValidationBase, {
     }
   }),
 
-  isValid: false,
+  valid: false,
   errors: null,
 
-  validationState: computed('isValid', function() {
-    const valid = this.get('isValid');
+  validationState: computed('valid', function() {
+    const valid = this.get('valid');
     let state = {};
 
     state.isValid = valid === true;
@@ -41,8 +41,46 @@ export default Component.extend(ValidationBase, {
   }),
 
   setState: function(params) {
-    this.set('errors', params.errors);
-    this.set('isValid', params.valid);
-  }
+    this.setProperties({
+      errors: params.errors,
+      valid: params.valid
+    });
+  },
+
+  actions: {
+    checkForValid() {
+      const errors = runValidations(this);
+
+      if (!errors.length) {
+        this.setState({
+          valid: true,
+          errors: null
+        });
+      }
+    },
+
+    validate() {
+      const errors = runValidations(this);
+
+      if (errors.length) {
+        this.setState({
+          valid: false,
+          errors: errors
+        });
+      } else {
+        this.setState({
+          valid: true,
+          errors: null
+        });
+      }
+    },
+
+    reset() {
+      this.setState({
+        valid: null,
+        errors: null
+      });
+    }
+  },
 
 });
