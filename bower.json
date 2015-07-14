@@ -1,5 +1,5 @@
 {
-  "name": "stickler",
+  "name": "ember-stickler",
   "dependencies": {
     "ember": "1.13.0",
     "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",

@@ -5,7 +5,8 @@ module.exports = {
   name: 'ember-stickler',
 
   isDevelopingAddon: function() {
-    return true;
+    return false;
+    // return true;
   }
 
 };
