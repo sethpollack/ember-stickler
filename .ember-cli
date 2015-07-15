@@ -5,7 +5,5 @@
 
     Setting `disableAnalytics` to true will prevent any data from being sent.
   */
-  "disableAnalytics": false,
-  "liveReload": true,
-  "watcher": "polling"
+  "disableAnalytics": false
 }

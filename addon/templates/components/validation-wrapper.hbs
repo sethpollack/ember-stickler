@@ -1,1 +1,6 @@
-{{yield value (action "change") errors valid validationState }}
+{{yield 
+	value 
+	(action "checkForValid") 
+	(action "validate") 
+	totalErrors
+	validationState }}

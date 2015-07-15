@@ -20,14 +20,11 @@ export default Ember.Route.extend({
 
 	actions: {
 		submit(reset, callback) {
+      let self = this;
+      let promise = new Ember.RSVP.Promise(function(resolve, reject) {
 
-      console.log('submit occurred :/');
-
-      var _this = this;
-      var promise = new Ember.RSVP.Promise(function(resolve, reject) {
-
-        Ember.run.later(_this, function() {
-          var status = didFail();
+        Ember.run.later(self, function() {
+          let status = didFail();
           if (!status) {
             this.controller.setProperties({
               firstName: '',
