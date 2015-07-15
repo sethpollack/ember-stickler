@@ -46,15 +46,15 @@
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='firstName'>First Name</label>
-        
+
         <input
           type="text"
           class='form-control'
           id='firstName'
           placeholder='first name'
-          value=firstName
-          oninput="(action checkForValid value='target.value')"
-          onfocusout="(action validate value='target.value')"
+          value={{firstName}}
+          onblur={{ action (action validate) value='target.value' }}
+          oninput={{ action (action checkForValid) value='target.value' }}
         >
 
         {{#if errors}}
@@ -64,18 +64,18 @@
 
    {{/validation-wrapper}}
 
-   {{#validation-wrapper class="input-group" value=lastName register=register rules='required max-length' minLengthValue='6' as |lastName checkForValid validate errors validationState| }}
+   {{#validation-wrapper class="input-group" value=lastName register=register rules='required max-length' maxLengthValue='3' as |lastName checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='lastName'>Last Name</label>
-        <input 
+        <input
           type="text"
           class='form-control'
           id='lastName'
           placeholder='last name'
-          value=lastName
-          oninput="(action checkForValid value='target.value')"
-          onfocusout="(action validate value='target.value')"
+          value={{lastName}}
+          onblur={{ action (action validate) value='target.value' }}
+          oninput={{ action (action checkForValid) value='target.value' }}
         >
 
         {{#if errors}}
@@ -85,7 +85,30 @@
 
    {{/validation-wrapper}}
 
-    <button class='btn btn-primary' disabled={{formState.disabled}} {{action submit}}>Submit</button>
+
+   {{#validation-wrapper class="input-group" value=email register=register rules='required email' as |lastName checkForValid validate errors validationState| }}
+
+      <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
+        <label for='email'>Email</label>
+        <input
+          type="text"
+          class='form-control'
+          id='email'
+          placeholder='email'
+          value={{email}}
+          onblur={{ action (action validate) value='target.value' }}
+          oninput={{ action (action checkForValid) value='target.value' }}
+        >
+
+        {{#if errors}}
+          <span>{{first errors}}</span>
+        {{/if}}
+      </div>
+
+   {{/validation-wrapper}}
+    <p>
+      <button class='btn btn-primary' disabled={{formState.disabled}} {{action submit}}>Submit</button>
+    </p>
 
  {{/validated-form}}
 

@@ -14,6 +14,7 @@ const {
 export default Component.extend(ValidationBase, {
   layout: layout,
 
+  tagName: '',
   value: null,
   submitErrors: null,
   errors: null,
@@ -57,7 +58,7 @@ export default Component.extend(ValidationBase, {
       run(() => {
         this.set('value', v);
       });
-      
+
       const errors = runValidations(this);
 
       if (!errors.length) {
