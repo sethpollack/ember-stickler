@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import layout from '../templates/components/validation-wrapper';
-import ValidationBase from '../mixins/validation-base';
 import runValidations from '../utils/run-validations';
 
 const {
@@ -11,7 +10,7 @@ const {
   run
   } = Ember;
 
-export default Component.extend(ValidationBase, {
+export default Component.extend({
   layout: layout,
 
   tagName: '',
@@ -19,10 +18,10 @@ export default Component.extend(ValidationBase, {
   submitErrors: null,
   errors: null,
   valid: null,
+  selectedRules: null,
+  isRequired: false,
+  register: null,
 
-  setState: function(params) {
-    this.setProperties(params);
-  },
 
   totalErrors: computed('submitErrors', 'errors', function() {
     let submitErrors = this.get('submitErrors') || [];
@@ -53,37 +52,33 @@ export default Component.extend(ValidationBase, {
   }),
 
   actions: {
-    checkForValid(v) {
-      console.log('checkForValid')
-      run(() => {
-        this.set('value', v);
-      });
-
+    checkForValid(value) {
+      if(value !== undefined) {
+        this.set('value', value);
+      }
       const errors = runValidations(this);
 
       if (!errors.length) {
-        this.setState({
+        this.setProperties({
           valid: true,
           errors: null
         });
       }
     },
 
-    validate(v) {
-      console.log('validate')
-      run(() => {
-        this.set('value', v);
-      });
-
+    validate(value) {
+      if(value !== undefined) {
+        this.set('value', value);
+      }
       const errors = runValidations(this);
 
       if (errors.length) {
-        this.setState({
+        this.setProperties({
           valid: false,
           errors: errors
         });
       } else {
-        this.setState({
+        this.setProperties({
           valid: true,
           errors: null
         });
@@ -91,10 +86,32 @@ export default Component.extend(ValidationBase, {
     },
 
     reset() {
-      this.setState({
+      this.setProperties({
         valid: null,
         errors: null
       });
     }
+  },
+
+  init: function() {
+    this._super();
+
+    let rules = this.get('rules');
+    const register = this.get('register');
+
+    rules = rules ? rules.split(' ') : [];
+
+    if (rules.indexOf('required') !== -1 || rules.indexOf('exists') !== -1) {
+      this.set('isRequired', true);
+    }
+
+    rules = rules.map(rule => {
+      let validator = this.container.lookupFactory(`validation:${rule}`);
+      return validator.validate.bind(this);
+    });
+
+    this.set('selectedRules', rules);
+
+    register(this);
   }
 });
