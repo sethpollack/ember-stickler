@@ -1,6 +1,5 @@
 export default function runValidations(self) {
   const value = self.get('value');
-  let errors = [];
 
   if (!self.get('isRequired') && !value) {
     return [];
@@ -8,6 +7,6 @@ export default function runValidations(self) {
 
   const rules = self.get('selectedRules');
 
-  rules.forEach(rule => rule(value, errors));
+  let [_, errors] = rules.reduce((memo, rule) => rule(memo), [value, []]);
   return errors;
 }
