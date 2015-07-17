@@ -105,9 +105,8 @@ export default Component.extend({
       this.set('isRequired', true);
     }
 
-    rules = rules.map(rule => {
-      return this.container.lookupFactory(`validation:${rule}`);
-    });
+    rules = rules.map(rule => this.container.lookupFactory(`validation:${rule}`))
+    .filter(rule => !!rule);
 
     this.set('selectedRules', rules);
 
