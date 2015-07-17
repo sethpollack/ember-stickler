@@ -3,11 +3,11 @@
 
  {{#validated-form as |register submit reset submitErrors formState| }}
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=intensity 
-    register=register 
-    rules="exists is-eleven" 
+   {{#validation-wrapper
+    class="input-group"
+    value=intensity
+    register=register
+    rules="exists is-eleven"
     submitErrors=submitErrors.level
     as |level checkForValid validate errors validationState| }}
 
@@ -21,10 +21,10 @@
    {{/validation-wrapper}}
 
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=isIntense 
-    register=register 
+   {{#validation-wrapper
+    class="input-group"
+    value=isIntense
+    register=register
     rules="exists"
     submitErrors=submitErrors.isIntense
     as |isIntense checkForValid validate errors validationState| }}
@@ -39,11 +39,11 @@
    {{/validation-wrapper}}
 
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=coolness 
-    register=register 
-    rules="exists is-eleven" 
+   {{#validation-wrapper
+    class="input-group"
+    value=coolness
+    register=register
+    rules="exists is-eleven"
     submitErrors=submitErrors.coolFactor
     as |coolFactor checkForValid validate errors validationState| }}
 
@@ -60,11 +60,11 @@
 
    {{/validation-wrapper}}
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=firstName 
-    register=register 
-    rules='required min-length' minLengthValue='3' 
+   {{#validation-wrapper
+    class="input-group"
+    value=firstName
+    register=register
+    rules='trim required min-length' minLengthValue='3'
     submitErrors=submitErrors.firstName
     as |firstName checkForValid validate errors validationState| }}
 
@@ -87,10 +87,10 @@
 
    {{/validation-wrapper}}
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=lastName 
-    register=register 
+   {{#validation-wrapper
+    class="input-group"
+    value=lastName
+    register=register
     rules='required max-length' maxLengthValue='3'
     submitErrors=submitErrors.lastName
     as |lastName checkForValid validate errors validationState| }}
@@ -114,11 +114,11 @@
    {{/validation-wrapper}}
 
 
-   {{#validation-wrapper 
-    class="input-group" 
-    value=email 
-    register=register 
-    rules='required email' 
+   {{#validation-wrapper
+    class="input-group"
+    value=email
+    register=register
+    rules='required email'
     submitErrors=submitErrors.email
     as |lastName checkForValid validate errors validationState| }}
 
