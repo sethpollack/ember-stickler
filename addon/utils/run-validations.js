@@ -7,6 +7,6 @@ export default function runValidations(self) {
 
   const rules = self.get('selectedRules');
 
-  let [_, errors] = rules.reduce((memo, rule) => rule(memo), [value, []]);
+  let [_, errors] = rules.reduce((memo, rule) => rule.run(self, memo), [value, []]);
   return errors;
 }

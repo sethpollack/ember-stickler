@@ -1,11 +1,13 @@
-export default {
-  validate([value, messages]) {
+import Validation from 'ember-stickler/validation';
+
+export default Validation.create({
+  validate(value, errors) {
     if (!value || !value.length) {
       const message = this.getWithDefault('requiredMessage', 'This field is required');
-
-      messages.push(message);
+      
+      errors.push(message);
     }
 
-    return [value, messages];
+    return errors;
   }
-}
+});

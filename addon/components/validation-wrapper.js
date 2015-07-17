@@ -106,8 +106,7 @@ export default Component.extend({
     }
 
     rules = rules.map(rule => {
-      let validator = this.container.lookupFactory(`validation:${rule}`);
-      return validator.validate.bind(this);
+      return this.container.lookupFactory(`validation:${rule}`);
     });
 
     this.set('selectedRules', rules);
