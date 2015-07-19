@@ -5,41 +5,35 @@ import { module, test } from 'qunit';
 module('Unit | Validation | email');
 
 test('valid', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   let Context = Ember.Object.extend({});
 
   let email = emailValidator.validate.bind(Context.create({}));
 
-  let errors = [];
-  let result = email('f@b.c', errors);
+  let result = email('f@b.c', []);
 
-  assert.equal(result, true);
-  assert.deepEqual(errors, []);
+  assert.deepEqual(result, []);
 });
 
 test('inValid', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   let Context = Ember.Object.extend({});
 
   let email = emailValidator.validate.bind(Context.create({}));
 
-  let errors = [];
-  let result = email('fb.c', errors);
-  assert.equal(result, false);
-  assert.deepEqual(errors, ['A valid email address is required']);
+  let result = email('fb.c', []);
+  assert.deepEqual(result, ['A valid email address is required']);
 });
 
 test('message override', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   let Context = Ember.Object.extend({});
 
   let email = emailValidator.validate.bind(Context.create({emailMessage: 'foo'}));
 
-  let errors = [];
-  let result = email('fb.c', errors);
-  assert.equal(result, false);
-  assert.deepEqual(errors, ['foo']);
+  let result = email('fb.c', []);
+  assert.deepEqual(result, ['foo']);
 });
