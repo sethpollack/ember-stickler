@@ -4,7 +4,6 @@ import layout from '../templates/components/validated-form';
 const {
   computed,
   Component,
-  set: set
   } = Ember;
 
 export default Component.extend({
@@ -17,12 +16,7 @@ export default Component.extend({
   submitErrors: null,
   action: 'submit',
   disableDuringSubmit: false,
-
   _promiseState: 'default',
-
-  resetFields() {
-    this.send('reset');
-  },
 
   submit(e) {
     e.preventDefault();
@@ -30,16 +24,6 @@ export default Component.extend({
     this.send('submit');
 
     return false;
-  },
-
-  _submitResolve() {
-    this.set('submitErrors', null);
-    this.set('_promiseState', 'resolved');
-  },
-
-  _submitReject(errors) {
-    this.set('submitErrors', errors);
-    this.set('_promiseState', 'rejected');
   },
 
   formState: computed('isValid', '_promiseState', function() {
@@ -67,22 +51,28 @@ export default Component.extend({
     },
 
     submit() {
-      this.get('fields').forEach(field => field.send('validate'));
+      const self = this;
+      
+      self.get('fields').forEach(field => field.send('validate'));
 
-      const reset = this.resetFields.bind(this);
-      let self = this;
+      const reset = function() {
+        self.send('reset');
+      };
 
-      function callback(promise) {
-        set(self, '_promiseState', 'pending');
+      if(self.get('isValid')) {
 
-        promise.then(
-          self._submitResolve.bind(self),
-          self._submitReject.bind(self)
-        );
-      }
-
-      if(this.get('isValid')) {
-        this.sendAction('action', reset, callback);
+        new Promise(function(resolve, reject) {
+          self.set('_promiseState', 'pending');
+          self.sendAction('action', reset, resolve, reject);
+        })
+        .then(function() {
+          self.set('submitErrors', null);
+          self.set('_promiseState', 'resolved');
+        })
+        .catch(function(errors) {
+          self.set('submitErrors', errors);
+          self.set('_promiseState', 'rejected');
+        });
       }
     },
 
