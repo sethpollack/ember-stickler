@@ -36,3 +36,6 @@ install:
 
 script:
   - ember try $EMBER_TRY_SCENARIO test
+
+after_script:
+  - cat lcov.info | node_modules/coveralls/bin/coveralls.js
