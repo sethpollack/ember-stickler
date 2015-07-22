@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 
 moduleForComponent('validation-wrapper', 'Unit | Component | validation wrapper', {
@@ -9,144 +8,223 @@ moduleForComponent('validation-wrapper', 'Unit | Component | validation wrapper'
 test('registers component on init', function(assert) {
   assert.expect(1);
 
-  const component = this.subject();
+  let register = null;
 
-  component.set('register', function(params) {
-    assert.equal(params, component);
+  const component = this.subject({
+    register(params) {
+      register = params;
+    }
   });
 
-  component.trigger('init');
+  this.render();
+
+  assert.equal(register, component);
 });
 
 test('loads rules on #init', function(assert) {
   assert.expect(1);
 
-  const component = this.subject();
-
-  component.set('rules', 'required');
-  component.set('register', function() {});
-  component.set('setState', function(params) {
-    assert.deepEqual(params, {
-      valid: false,
-      errors: ['This field is required']
-    });
+  const component = this.subject({
+    rules: 'required',
+    register() {}
   });
 
   this.render();
 
-  component.send('validate');
+  let rules = component.get('selectedRules');
+
+  assert.equal(rules.length, 1);
 });
 
-test('optional by default', function(assert) {
-  assert.expect(1);
+test('rules are optional by default', function(assert) {
+  assert.expect(2);
 
-  const component = this.subject();
-
-  component.set('rules', 'email');
-  component.set('register', function() {});
-  component.set('setState', function(params) {
-    assert.deepEqual(params, {
-      valid: true,
-      errors: null
-    });
+  const component = this.subject({
+    rules: 'email',
+    register() {}
   });
-
-  component.trigger('init');
-
+  
   this.render();
 
   component.send('validate');
+
+  let valid = component.get('valid');
+  let errors = component.get('errors');
+
+  assert.equal(valid, true);
+  assert.equal(errors, null);
 });
 
-test('#checkForValid', function(assert) {
-  assert.expect(0);
+test('#checkForValid should not set errors', function(assert) {
+  assert.expect(2);
 
-  const component = this.subject();
-
-  component.set('rules', 'required');
-  component.set('register', function() {});
-  component.set('setState', function() {
-    assert.equal(false, true);
+  const component = this.subject({
+    rules: 'required',
+    register() {}
   });
-
-  component.trigger('init');
 
   this.render();
 
   component.send('checkForValid');
+  
+  let valid = component.get('valid');
+  let errors = component.get('errors');
+
+  assert.equal(valid, null);
+  assert.equal(errors, null);
+});
+
+test('#checkForValid should clear errors', function(assert) {
+  assert.expect(4);
+
+  const component = this.subject({
+    rules: 'required',
+    register() {}
+  });
+
+  this.render();
+
+  component.send('validate');
+
+  let valid;
+  let errors;
+
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, false);
+  assert.deepEqual(errors, ['This field is required']);
+
+  component.set('value', 'foobar');
+  component.send('checkForValid');
+  
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, true);
+  assert.equal(errors, null);
 });
 
 test('#validate', function(assert) {
-  assert.expect(2);
+  assert.expect(4);
 
-  const component = this.subject();
-
-  Ember.run(function() {
-    component.set('rules', 'required');
-    component.set('value', 'foo');
-    component.set('register', function() {});
-    component.set('setState', function(params) {
-      assert.deepEqual(params, {
-        valid: true,
-        errors: null
-      });
-    });
+  const component = this.subject({
+    rules: 'required',
+    value: 'foo',
+    register() {}
   });
-
-  component.trigger('init');
 
   this.render();
 
   component.send('validate');
 
-  Ember.run(function() {
-    component.set('value', '');
-    component.set('setState', function(params) {
-      assert.deepEqual(params, {
-        valid: false,
-        errors: [{ message: 'This field is required' }]
-      });
-    });
-  });
+  let valid;
+  let errors;
+
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, true);
+  assert.equal(errors, null);
+
+
+  component.set('value', '');
 
   component.send('validate');
+
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, false);
+  assert.deepEqual(errors, ['This field is required']);
 });
 
 test('#reset', function(assert) {
-  assert.expect(2);
-
-  const component = this.subject();
+  assert.expect(4);
+  
   const outer = { registered: false, fields: [] };
 
-  Ember.run(function() {
-    component.set('rules', 'required');
-    component.set('value', '');
-    component.set('register', function(context) {
+  const component = this.subject({
+    rules: 'required',
+    value: '',
+    register(context) {
       outer.registered = true;
       outer.fields.push(context);
-    });
-    component.set('setState', function(params) {
-      assert.deepEqual(params, {
-        valid: false,
-        errors: ['This field is required']
-      });
-    });
+    }
   });
-
-  component.trigger('init');
+  
   this.render();
 
   component.send('validate');
 
-  Ember.run(function() {
-    component.set('value', '');
-    component.set('setState', function(params) {
-      assert.deepEqual(params, {
-        valid: null,
-        errors: null
-      });
-    });
-  });
+  let valid;
+  let errors;
+
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, false);
+  assert.deepEqual(errors, ['This field is required']);
 
   component.send('reset');
+
+  valid = component.get('valid');
+  errors = component.get('errors');
+
+  assert.equal(valid, null);
+  assert.equal(errors, null);
+});
+
+test('#validationState', function(assert) {
+  assert.expect(15);
+
+  const component = this.subject({
+    register() {}
+  });
+
+  let formState;
+
+  formState =  component.get('validationState');
+
+  assert.equal(formState.valid, null);
+  assert.equal(formState.isValid, false);
+  assert.equal(formState.isInvalid, false);
+  assert.equal(formState.isInitial, true);
+  assert.equal(formState.text, 'initial');
+
+  component.set('valid', true);
+
+  formState =  component.get('validationState');
+
+  assert.equal(formState.valid, true);
+  assert.equal(formState.isValid, true);
+  assert.equal(formState.isInvalid, false);
+  assert.equal(formState.isInitial, false);
+  assert.equal(formState.text, 'valid');
+
+  component.set('valid', false);
+
+  formState =  component.get('validationState');
+
+  assert.equal(formState.valid, false);
+  assert.equal(formState.isValid, false);
+  assert.equal(formState.isInvalid, true);
+  assert.equal(formState.isInitial, false);
+  assert.equal(formState.text, 'invalid');
+});
+
+test('#totalErrors', function(assert) {
+  assert.expect(1);
+
+  const component = this.subject({
+    register() {},
+    errors: 'foo',
+    submitErrors: 'bar'
+  });
+
+  this.render();
+
+  let totalErrors = component.get('totalErrors');
+
+  assert.deepEqual(totalErrors, ['bar', 'foo']);
 });

@@ -7,58 +7,50 @@ moduleForComponent('validated-form', 'Unit | Component | validated form', {
   unit: true
 });
 
-test('#submit', function(assert) {
- assert.expect(2);
- 
- const component = this.subject();
- 
- const Obj = Ember.Object.extend({
-   isValid: true,
-   validate() {},
-   send(params){
-     assert.equal(params, 'validate');
-   }
- });
+test('should create fields on init', function(assert) {
+  assert.expect(1);
 
- let object = Obj.create();
+  const component = this.subject();
 
- Ember.run(function() {
-  component.set('action', function(params) {
-    assert.equal(params, component);
-  });
- });
- 
- Ember.run(function() {
-   component.trigger('init');
- });
- 
- Ember.run(function() {
-   component.send('register', object);
- });
+  this.render();
 
- Ember.run(function() {
-   component.trigger('submit', { preventDefault() {} });
- }); 
+  const fields = component.get('fields');
+
+  assert.deepEqual(fields, []);
 });
 
-test('#valid', function(assert) {
+test('should register new fields', function(assert) {
+  assert.expect(1);
+
+  const component = this.subject();
+  const field = {};
+
+  this.render();
+
+  Ember.run(function() {
+    component.send('register', field);
+  });
+
+  const fields = component.get('fields');
+  
+  assert.deepEqual(fields, [field]);
+});
+
+test('should check if form is valid', function(assert) {
   assert.expect(2);
 
   const component = this.subject();
-  let valid;
 
   const Obj = Ember.Object.extend({
-    isValid: true,
+    valid: true,
     validate() {}
   });
 
-  let object1 = Obj.create({ isValid: false });
+  let object1 = Obj.create({ valid: false });
   let object2 = Obj.create();
   let object3 = Obj.create();
   
-  Ember.run(function() {
-    component.trigger('init');
-  });
+  this.render();
   
   Ember.run(function() {
     component.send('register', object1);
@@ -66,38 +58,83 @@ test('#valid', function(assert) {
     component.send('register', object3);
   });
 
-  valid = component.get('valid');
+  let isValid;
 
-  assert.equal(valid, false);
+  isValid = component.get('isValid');
 
-  object1.set('isValid', true);
+  assert.equal(isValid, false);
+
+  object1.set('valid', true);
   
-  valid = component.get('valid');
+  isValid = component.get('isValid');
 
-  assert.equal(valid, true);
+  assert.equal(isValid, true);
 });
 
-test('#register', function(assert) {
-  assert.expect(1);
+test('should set form state', function(assert) {
+  assert.expect(30);
 
   const component = this.subject();
+  let formState;
 
-  let object = {};
+  formState =  component.get('formState');
+
+  assert.equal(formState.isDefault, true);
+  assert.equal(formState.isPending, false);
+  assert.equal(formState.isResolved, false);
+  assert.equal(formState.isRejected, false);
+  assert.equal(formState.disabled, false);
+  assert.equal(formState.text, 'default');
+
+
+  component.set('isValid', false);
+
+  formState =  component.get('formState');
+
+  assert.equal(formState.isDefault, true);
+  assert.equal(formState.isPending, false);
+  assert.equal(formState.isResolved, false);
+  assert.equal(formState.isRejected, false);
+  assert.equal(formState.disabled, true);
+  assert.equal(formState.text, 'default');
+
+  component.set('isValid', true);
+  component.set('disableDuringSubmit', true);
+  component.set('_promiseState', 'pending');
+
+  formState =  component.get('formState');
+
+  assert.equal(formState.isDefault, false);
+  assert.equal(formState.isPending, true);
+  assert.equal(formState.isResolved, false);
+  assert.equal(formState.isRejected, false);
+  assert.equal(formState.disabled, true);
+  assert.equal(formState.text, 'pending');
+
+  component.set('_promiseState', 'resolved');
+
+  formState =  component.get('formState');
+
+  assert.equal(formState.isDefault, false);
+  assert.equal(formState.isPending, false);
+  assert.equal(formState.isResolved, true);
+  assert.equal(formState.isRejected, false);
+  assert.equal(formState.disabled, false);
+  assert.equal(formState.text, 'resolved');
   
-  Ember.run(function() {
-    component.trigger('init');
-  });
+  component.set('_promiseState', 'rejected');
 
-  Ember.run(function() {
-    component.send('register', object);
-  });
+  formState =  component.get('formState');
 
-  let fields = component.get('fields');
-
-  assert.deepEqual(fields, [object]);
+  assert.equal(formState.isDefault, false);
+  assert.equal(formState.isPending, false);
+  assert.equal(formState.isResolved, false);
+  assert.equal(formState.isRejected, true);
+  assert.equal(formState.disabled, false);
+  assert.equal(formState.text, 'rejected');
 });
 
-test('#resetFields', function(assert) {
+test('it should reset fields', function(assert) {
   assert.expect(1);
 
   const component = this.subject();
@@ -108,15 +145,13 @@ test('#resetFields', function(assert) {
     }
   };
   
-  Ember.run(function() {
-    component.trigger('init');
-  });
+  this.render();
   
   Ember.run(function() {
     component.send('register', object);
   });
 
   Ember.run(function() {
-    component.send('resetFields');
+    component.send('reset');
   });
 });

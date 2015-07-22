@@ -42,7 +42,7 @@ export default Component.extend({
     const valid = this.get('valid');
     let state = {};
 
-    state.valid = valid
+    state.valid = valid;
     state.isValid = valid === true;
     state.isInvalid = valid === false;
     state.isInitial = valid === null;
@@ -61,7 +61,8 @@ export default Component.extend({
       if (!errors.length) {
         this.setProperties({
           valid: true,
-          errors: null
+          errors: null,
+          submitErrors: null
         });
       }
     },
@@ -80,7 +81,8 @@ export default Component.extend({
       } else {
         this.setProperties({
           valid: true,
-          errors: null
+          errors: null,
+          submitErrors: null
         });
       }
     },
