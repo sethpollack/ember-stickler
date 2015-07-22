@@ -1,5 +1,5 @@
 {
-  "name": "stickler",
+  "name": "ember-stickler",
   "version": "0.0.0",
   "description": "Component based validations for Ember",
   "directories": {
@@ -9,10 +9,9 @@
   "scripts": {
     "start": "ember server",
     "build": "ember build",
-    "test": "ember try:testall",
-    "postinstall": "bower install"
+    "test": "ember try:testall"
   },
-  "repository": "",
+  "repository": "https://github.com/sethpollack/ember-stickler",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -20,29 +19,35 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.2",
-    "ember-cli": "0.2.7",
-    "ember-cli-app-version": "0.3.3",
+    "coveralls": "^2.11.3",
+    "ember-cli": "1.13.1",
+    "ember-cli-app-version": "0.4.0",
+    "ember-cli-blanket": "0.5.3",
     "ember-cli-content-security-policy": "0.4.0",
     "ember-cli-dependency-checker": "^1.0.0",
-    "ember-cli-htmlbars": "0.7.6",
-    "ember-cli-ic-ajax": "0.1.1",
+    "ember-cli-ic-ajax": "0.2.1",
     "ember-cli-inject-live-reload": "^1.3.0",
-    "ember-cli-qunit": "0.3.13",
+    "ember-cli-qunit": "0.3.15",
+    "ember-cli-release": "0.2.3",
     "ember-cli-uglify": "^1.0.1",
-    "ember-data": "1.0.0-beta.18",
+    "ember-data": "1.13.5",
+    "ember-disable-prototype-extensions": "^1.0.0",
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
-    "ember-disable-prototype-extensions": "^1.0.0",
-    "ember-try": "0.0.6"
+    "ember-try": "0.0.6",
+    "istanbul": "^0.3.17"
   },
   "keywords": [
-    "ember-addon",
+    "ember",
+    "component",
     "validations",
     "validate",
-    "stickler"
+    "stickler",
+    "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.0.0"
+    "ember-cli-babel": "^5.0.0",
+    "ember-cli-htmlbars": "0.7.9"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

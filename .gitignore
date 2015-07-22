@@ -1,4 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
+.idea
+.DS_Store
 
 # compiled output
 /dist
@@ -15,3 +17,4 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+lcov.info

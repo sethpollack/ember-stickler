@@ -2,5 +2,11 @@
 'use strict';
 
 module.exports = {
-  name: 'stickler'
+  name: 'ember-stickler',
+
+  isDevelopingAddon: function() {
+    return false;
+    // return true;
+  }
+
 };
