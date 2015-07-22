@@ -1,6 +1,6 @@
 {
   "name": "ember-stickler",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Component based validations for Ember",
   "directories": {
     "doc": "doc",
