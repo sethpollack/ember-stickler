@@ -43,4 +43,4 @@ addons:
     repo_token: 145edba82f0f85ef8c28cd8d6a4ca4eb2cc8f2f7c002d2d76fbb62ab2a8b2712
 
 after_script:
-  - codeclimate-test-reporter < lcov.dat
+  - codeclimate-test-reporter < lcov.info
