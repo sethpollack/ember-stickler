@@ -22,14 +22,11 @@ like `<validation-name><option>`.
 For example:
 
 ```hbs
-  {{validated-input
-    action='validate'
-    value=message
-    rules='min-length'
-    minLengthMessage='A minimum of 10 characters are required'
-    minLengthValue=5
-  }}
-
+   {{#validation-wrapper
+    value=firstName
+    rules='trim required min-length' 
+    minLengthValue='3'
+    }}
 ```
 
 ### The following rules are available:
