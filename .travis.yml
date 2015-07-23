@@ -44,3 +44,7 @@ addons:
 
 after_script:
   - codeclimate-test-reporter < lcov.info
+
+branches:
+  only:
+    - master
