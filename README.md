@@ -1,9 +1,9 @@
-[![ember-stickler](http://img.shields.io/npm/v/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
-[![ember-stickler](http://img.shields.io/npm/dm/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
-[![ember-stickler](http://img.shields.io/npm/l/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
-[![Build Status](https://img.shields.io/travis/sethpollack/ember-stickler.svg?style=flat-square)](https://travis-ci.org/sethpollack/ember-stickler)
-[![Coveralls](https://img.shields.io/coveralls/sethpollack/ember-stickler.svg?style=flat-square)](https://coveralls.io/r/sethpollack/ember-stickler)
-[![code climate](https://img.shields.io/codeclimate/github/sethpollack/ember-stickler.svg?style=flat-square)](https://codeclimate.com/github/sethpollack/ember-stickler)
+[![NPM Version](http://img.shields.io/npm/v/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
+[![NPM Downloads](http://img.shields.io/npm/dm/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
+[![NPM License](http://img.shields.io/npm/l/ember-stickler.svg?style=flat-square)](https://www.npmjs.com/package/ember-stickler)
+[![Travis Build Status](https://img.shields.io/travis/sethpollack/ember-stickler.svg?style=flat-square)](https://travis-ci.org/sethpollack/ember-stickler)
+[![Code Climate](https://img.shields.io/codeclimate/github/sethpollack/ember-stickler.svg?style=flat-square)](https://codeclimate.com/github/sethpollack/ember-stickler)
+[![Code Climate Coverage](https://img.shields.io/codeclimate/coverage/github/sethpollack/ember-stickler.svg?style=flat-square)](https://codeclimate.com/github/sethpollack/ember-stickler)
 
 # Ember Stickler
 
