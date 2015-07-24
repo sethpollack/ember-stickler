@@ -15,32 +15,152 @@ Install with:
 ember install ember-stickler
 ```
 
-Validations are added with a rules attribute `rules=''` and are separated by spaces.
-Messages and other defaults can be overridden with additional camelCased attributes formatted 
-like `<validation-name><option>`.
-
-For example:
+ember-stickler is comprised of two components `validated-form` and `validation-wrapper`. The `validation-wrappers` wrap around each input and are nested inside a `validated-form`.
 
 ```hbs
-   {{#validation-wrapper
-    value=firstName
-    rules='trim required min-length' 
-    minLengthValue='3'
-    }}
+  {{#validated-form}}
+    {{#validation-wrapper}}
+      <input type='text' value={{value}}/>
+    {{/validation-wrapper}}
+  {{/validated-form}}
 ```
 
-### The following rules are available:
+`validation-wrappers` are registered with the `register` action yielded by the `validated-form`.
+
+```hbs
+  {{#validated-form as |register|}}
+    {{#validation-wrapper register=register}}
+      <input type='text' value={{value}}/>
+    {{/validation-wrapper}}
+  {{/validated-form}}
+```
+
+This allows the `validated-form` to track each of the inputs. `validated-form` also yields  a `submit` which will trigger the validations in each of the registered wrappers and submit if they all pass.
+
+`validated-form` also yields a `reset` actions which will set all the validation state and errors back to their initial state. (However, it will not interfere the actual form values, you will need to reset those yourself).
+
+`validated-form` submits by calling `sendAction` on whatever action attr you add and will default to `submit`. It invokes the action passing the following arguments `reset`, `resolve`, `reject`.
+
+`reset` will reset all the state and errors, `resolve` will change the form state from `pending` to `resolved` and reject takes an error object with keys being the name of the field and value an array of error message strings.
+
+You can do something like this in your route:
+
+```javascript
+actions: {
+  submit(reset, resolve, reject) {
+    const self - this;
+    self.get('service').submit({
+      firstName: self.controller.get('firstName'),
+      lastName: self.controller.get('lastName'),
+      age: self.controller.get('age'),
+    })
+    .then(function() {
+      reset();
+      resolve();
+    })
+    .catch(function(errors) {
+      reject({
+        firstName: errors.firstName, //['first name is invalid!']
+        lastName: errors.lastName,
+        age: errors.age,
+      });
+    });
+  }
+}
+```
+Errors are then yielded by the `validated-form` and passed to each of the individual `validation-wrappers`.
+
+```hbs
+  {{#validated-form as |register submit reset submitErrors formState|}}
+    {{#validation-wrapper register=register submitErrors=submitErrors.firstName}}
+      <input type='text' value={{firstName}}/>
+    {{/validation-wrapper}}
+  {{/validated-form}}
+```
+
+and finally the `validated-form` yields a `formState` object with the following properties:
+
+* `isDefault`
+* `isPending`
+* `isResolved`
+* `text` // default, pending, resolved, rejected.
+* `disabled` // will be false when valid or is `disableDuringSubmit` attr is added to the `validated-form` and the submit is pending.
+
+
+Validation rules are added to the `validation-wrappers` with a rules attribute `rules=''` (separated by spaces). Messages and other defaults can be overridden with additional camelCased attributes formatted like `<validation-name><option>`.
+
+```hbs
+  {{#validated-form as |register submit reset submitErrors formState|}}
+    {{#validation-wrapper
+      register=register
+      submitErrors=submitErrors.firstName
+      rules='required min-length'
+      minLengthValue=5
+      minLengthMessage='a minimum of 5 characters is required'
+    }}
+      <input type='text' value={{firstName}}/>
+    {{/validation-wrapper}}
+  {{/validated-form}}
+```
+
+`validation-wrappers` yield two validation actions `checkForValid` which will ignore errors and only change the state when it passes the validation and `validate` which will check for both success and errors. They both take the current value as an argument.
+
+```hbs
+  {{#validated-form as |register submit reset submitErrors formState|}}
+    {{#validation-wrapper
+      register=register
+      submitErrors=submitErrors.firstName
+      rules='required min-length'
+      minLengthValue=5
+      minLengthMessage='a minimum of 5 characters is required'
+      as |checkForValid validate|
+    }}
+      <input
+      type='text'
+      value={{firstName}}
+      onblur={{action checkForValid value="target.checked"}}/>
+      onchange={{action validate value="target.checked"}}/>
+    {{/validation-wrapper}}
+  {{/validated-form}}
+```
+additionally the `validation-wrappers` yield `errors` an array of error messages and a `validationState` object with the following properties:
+
+* `valid` // null, true, false
+* `isValid` // true, false
+* `isInvalid` // true, false
+* `isInitial` // true, false
+* `text` // valid, invalid, initial
+
+##helpers
+
+stickler provides `class-state` helper for managing error classes it takes `valid` as the first param and then three classes first for true, the second for false and the third for null, the third param defaults to an empty string.
+
+```hbs
+  <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
+```
+
+stickler also provides a `first` helper which you can use to get the first error message from `errors`
+
+```hbs
+{{#if errors}}
+  <span>{{first errors}}</span>
+{{/if}}
+```
+
+### The following rules are currently available:
 
 * `email`
 * `min-length`
 * `max-length`
 * `required`
 
-### The following transforms are available:
+### The following transforms are currently available:
 
 * `trim`
 
-You can add more rules/transforms by creating a `app/validations` directory and adding a 
+> If you have any validations or transforms that you would like to add, please submit a pull request. Thanks!
+
+You can add more rules/transforms by creating a `app/validations` directory and adding a
 file in the following formats:
 
 For Validations:
@@ -69,12 +189,12 @@ export default Transform.create({
 
 ```
 
-The `this` context in all the rules will be the component that the 
-rule is validating allowing access to the value `const value = this.get('value');` as well 
-as any other attibutes `const value = this.get('minLengthMessage');`.
+The `this` context in all the rules will be the component that the
+rule is validating allowing access to the value `const value = this.get('value');` as well
+as any other attrs `const value = this.get('minLengthMessage');`.
 
 
-## Current API:
+## Full Example
 
 ```hbs
 <div class='container'>
@@ -84,14 +204,13 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=intensity
     register=register
     rules="exists is-eleven"
-    submitErrors=submitErrors.level
-    as |level checkForValid validate errors validationState| }}
+    submitErrors=submitErrors.intensity
+    as |checkForValid validate errors validationState| }}
 
        <label for="intensity">Department To Route Campaign Responses To</label>
-       <input type="range" id="intensity" value={{level}} min=0 max=11 oninput={{action validate value="target.value"}}>
+       <input type="range" id="intensity" value={{intensity}} min=0 max=11 oninput={{action validate value="target.value"}}>
 
      {{#if errors}}
          <div class="col-xs-12 text-small text-danger">{{first errors}}</div>
@@ -102,11 +221,10 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=isIntense
     register=register
     rules="exists"
     submitErrors=submitErrors.isIntense
-    as |isIntense checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
        <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
        <input type="checkbox" id="checkbox-intensity" value={{isIntense}} onchange={{action validate value="target.checked"}} >
@@ -120,16 +238,15 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=coolness
     register=register
     rules="exists is-eleven"
-    submitErrors=submitErrors.coolFactor
-    as |coolFactor checkForValid validate errors validationState| }}
+    submitErrors=submitErrors.coolness
+    as |checkForValid validate errors validationState| }}
 
        <label for="intensity">Department To Route Campaign Responses To</label>
        <select onchange={{action validate value="target.value"}}>
          {{#each choices key="@identity" as |choice|}}
-             <option value={{choice}} selected={{is-equal coolFactor choice}}>{{choice}}</option>
+             <option value={{choice}} selected={{is-equal coolness choice}}>{{choice}}</option>
          {{/each}}
        </select>
 
@@ -141,11 +258,10 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=firstName
     register=register
     rules='trim required min-length' minLengthValue='3'
     submitErrors=submitErrors.firstName
-    as |firstName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='firstName'>First Name</label>
@@ -168,11 +284,10 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=lastName
     register=register
     rules='required max-length' maxLengthValue='3'
     submitErrors=submitErrors.lastName
-    as |lastName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='lastName'>Last Name</label>
@@ -195,11 +310,10 @@ as any other attibutes `const value = this.get('minLengthMessage');`.
 
    {{#validation-wrapper
     class="input-group"
-    value=email
     register=register
     rules='required email'
     submitErrors=submitErrors.email
-    as |lastName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='email'>Email</label>
