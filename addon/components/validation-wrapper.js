@@ -14,7 +14,6 @@ export default Component.extend({
   layout: layout,
 
   tagName: '',
-  value: null,
   submitErrors: null,
   errors: null,
   valid: null,

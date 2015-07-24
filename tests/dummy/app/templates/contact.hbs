@@ -5,14 +5,13 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=intensity
     register=register
     rules="exists is-eleven"
-    submitErrors=submitErrors.level
-    as |level checkForValid validate errors validationState| }}
+    submitErrors=submitErrors.intensity
+    as |checkForValid validate errors validationState| }}
 
        <label for="intensity">Department To Route Campaign Responses To</label>
-       <input type="range" id="intensity" value={{level}} min=0 max=11 oninput={{action validate value="target.value"}}>
+       <input type="range" id="intensity" value={{intensity}} min=0 max=11 oninput={{action validate value="target.value"}}>
 
      {{#if errors}}
          <div class="col-xs-12 text-small text-danger">{{first errors}}</div>
@@ -23,11 +22,10 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=isIntense
     register=register
     rules="exists"
     submitErrors=submitErrors.isIntense
-    as |isIntense checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
        <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
        <input type="checkbox" id="checkbox-intensity" value={{isIntense}} onchange={{action validate value="target.checked"}} >
@@ -41,16 +39,15 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=coolness
     register=register
     rules="exists is-eleven"
-    submitErrors=submitErrors.coolFactor
-    as |coolFactor checkForValid validate errors validationState| }}
+    submitErrors=submitErrors.coolness
+    as |checkForValid validate errors validationState| }}
 
        <label for="intensity">Department To Route Campaign Responses To</label>
        <select onchange={{action validate value="target.value"}}>
          {{#each choices key="@identity" as |choice|}}
-             <option value={{choice}} selected={{is-equal coolFactor choice}}>{{choice}}</option>
+             <option value={{choice}} selected={{is-equal coolness choice}}>{{choice}}</option>
          {{/each}}
        </select>
 
@@ -62,11 +59,10 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=firstName
     register=register
     rules='trim required min-length' minLengthValue='3'
     submitErrors=submitErrors.firstName
-    as |firstName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='firstName'>First Name</label>
@@ -89,11 +85,10 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=lastName
     register=register
     rules='required max-length' maxLengthValue='3'
     submitErrors=submitErrors.lastName
-    as |lastName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='lastName'>Last Name</label>
@@ -116,11 +111,10 @@
 
    {{#validation-wrapper
     class="input-group"
-    value=email
     register=register
     rules='required email'
     submitErrors=submitErrors.email
-    as |lastName checkForValid validate errors validationState| }}
+    as |checkForValid validate errors validationState| }}
 
       <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
         <label for='email'>Email</label>
