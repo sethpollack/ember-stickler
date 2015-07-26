@@ -150,40 +150,40 @@ stickler also provides a `first` helper which you can use to get the first error
 ## Validations
 
 #### Email
-rule: `email`
-attrs: `emailMessage`
+#####Rule: `email`
+#####Attrs: `emailMessage`
 
 #### Required
-rule: `required`
-attrs: `emailMessage`
+#####Rule: `required`
+#####Attrs: `emailMessage`
 
 #### Min Length
-rule: `min-length`
-attrs: `minLengthMessage`, `minLength`
+#####Rule: `min-length`
+#####Attrs: `minLengthMessage`, `minLength`
 
 #### Max Length
-rule: `max-length`
-attrs: `maxLengthMessage`, `maxLength`
+#####Rule: `max-length`
+#####Attrs: `maxLengthMessage`, `maxLength`
 
 #### Exists
-rule: `exists`
-attrs: `existsMessage`
+#####Rule: `exists`
+#####Attrs: `existsMessage`
 
 #### Url
-rule: `url`
-attrs: `urlMessage`
+#####Rule: `url`
+#####Attrs: `urlMessage`
 
 #### Digits
-rule: `digits`
-attrs: `digitsMessage`
+#####Rule: `digits`
+#####Attrs: `digitsMessage`
 
 #### Date
-rule: `date`
-attrs: `dateMessage`
+#####Rule: `date`
+#####Attrs: `dateMessage`
 
 #### DateISO
-rule: `dateISO`
-attrs: `dateISOMessage`
+#####Rule: `dateISO`
+#####Attrs: `dateISOMessage`
 
 ## Transforms
 
