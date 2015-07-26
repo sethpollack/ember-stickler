@@ -25,25 +25,32 @@ ember-stickler is comprised of two components `validated-form` and `validation-w
   {{/validated-form}}
 ```
 
-`validation-wrappers` are registered with the `register` action yielded by the `validated-form`.
+### Validated Form
 
 ```hbs
-  {{#validated-form as |register|}}
-    {{#validation-wrapper register=register}}
-      <input type='text' value={{value}}/>
-    {{/validation-wrapper}}
+  {{#validated-form as |register submit reset submitErrors formState|}}
+
   {{/validated-form}}
 ```
-
-This allows the `validated-form` to track each of the inputs. `validated-form` also yields  a `submit` which will trigger the validations in each of the registered wrappers and submit if they all pass.
-
-`validated-form` also yields a `reset` actions which will set all the validation state and errors back to their initial state. (However, it will not interfere the actual form values, you will need to reset those yourself).
-
 `validated-form` submits by calling `sendAction` on whatever action attr you add and will default to `submit`. It invokes the action passing the following arguments `reset`, `resolve`, `reject`.
 
-`reset` will reset all the state and errors, `resolve` will change the form state from `pending` to `resolved` and reject takes an error object with keys being the name of the field and value an array of error message strings.
+The `validated-form` yields the following:
 
-You can do something like this in your route:
+1. `register`, this is used by the `validation-wrappers` to register themselves with the form.
+
+2. `submit` this will trigger the validations in each of the `validation-wrappers` and will submit if they all pass.
+
+3. `reset` sets all the validation state and errors back to their initial state and changes the form state from `pending` to `resolved` and reject takes an error object with keys being the name of the field and value an array of error message strings.
+
+4. `formState` an object with the following properties:
+  * `isDefault`
+  * `isPending`
+  * `isResolved`
+  * `text` // default, pending, resolved, rejected.
+  * `disabled` // will be false when valid or is `disableDuringSubmit` attr is added to the `validated-form` and the submit is pending.
+
+
+All this allows you to do something like this in your route:
 
 ```javascript
 actions: {
@@ -78,14 +85,7 @@ Errors are then yielded by the `validated-form` and passed to each of the indivi
   {{/validated-form}}
 ```
 
-and finally the `validated-form` yields a `formState` object with the following properties:
-
-* `isDefault`
-* `isPending`
-* `isResolved`
-* `text` // default, pending, resolved, rejected.
-* `disabled` // will be false when valid or is `disableDuringSubmit` attr is added to the `validated-form` and the submit is pending.
-
+### Validation Wrapper
 
 Validation rules are added to the `validation-wrappers` with a rules attribute `rules=''` (separated by spaces). Messages and other defaults can be overridden with additional camelCased attributes formatted like `<validation-name><option>`.
 
@@ -97,25 +97,9 @@ Validation rules are added to the `validation-wrappers` with a rules attribute `
       rules='required min-length'
       minLengthValue=5
       minLengthMessage='a minimum of 5 characters is required'
+      as |checkForValid validate errors validationState|
     }}
-      <input type='text' value={{firstName}}/>
-    {{/validation-wrapper}}
-  {{/validated-form}}
-```
-
-`validation-wrappers` yield two validation actions `checkForValid` which will ignore errors and only change the state when it passes the validation and `validate` which will check for both success and errors. They both take the current value as an argument.
-
-```hbs
-  {{#validated-form as |register submit reset submitErrors formState|}}
-    {{#validation-wrapper
-      register=register
-      submitErrors=submitErrors.firstName
-      rules='required min-length'
-      minLengthValue=5
-      minLengthMessage='a minimum of 5 characters is required'
-      as |checkForValid validate|
-    }}
-      <input
+    <input
       type='text'
       value={{firstName}}
       onblur={{action checkForValid value="target.checked"}}/>
@@ -123,13 +107,21 @@ Validation rules are added to the `validation-wrappers` with a rules attribute `
     {{/validation-wrapper}}
   {{/validated-form}}
 ```
-additionally the `validation-wrappers` yield `errors` an array of error messages and a `validationState` object with the following properties:
 
-* `valid` // null, true, false
-* `isValid` // true, false
-* `isInvalid` // true, false
-* `isInitial` // true, false
-* `text` // valid, invalid, initial
+The `validated-wrapper` yields the following:
+
+1. `checkForValid` an action which will ignore errors and only change the state when it passes the validation.
+
+2. `validate` which will check for both success and errors.
+
+3. `errors` an array of error messages.
+
+4. `validationState` object with the following properties:
+  * `valid` // null, true, false
+  * `isValid` // true, false
+  * `isInvalid` // true, false
+  * `isInitial` // true, false
+  * `text` // valid, invalid, initial
 
 ## Helpers
 
@@ -236,8 +228,6 @@ stickler also provides a `first` helper which you can use to get the first error
 ## Transforms
 
 * `trim`
-
-> If you have any validations or transforms that you would like to add, please submit a pull request. Thanks!
 
 You can add more rules/transforms by creating a `app/validations` directory and adding a
 file in the following formats:
