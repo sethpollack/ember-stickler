@@ -19,7 +19,7 @@ test('inValid', function(assert) {
   const Context = Ember.Object.extend({});
   const minLength = minLengthValidator.validate.bind(Context.create({minLength: '2'}));
 
-  assert.deepEqual(minLength('1', []), ['Min length of 2 allowed']);
+  assert.deepEqual(minLength('1', []), ['Please enter at least 2 characters.']);
 });
 
 test('message override', function(assert) {

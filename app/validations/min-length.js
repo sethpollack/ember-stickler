@@ -5,7 +5,7 @@ export default Validation.create({
     const length = this.get('minLength');
 
     if (!value || value.length < parseInt(length)) {
-      const message = this.getWithDefault('minLengthMessage', `Min length of ${length} allowed`);
+      const message = this.getWithDefault('minLengthMessage', `Please enter at least ${length} characters.`);
 
       errors.push(message);
     }

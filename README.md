@@ -215,6 +215,18 @@ stickler also provides a `first` helper which you can use to get the first error
 
 **Attrs:** `creditCardMessage`
 
+#### Max
+
+**Rule:** `max`
+
+**Attrs:** `maxMessage`
+
+#### Min
+
+**Rule:** `min`
+
+**Attrs:** `minMessage`
+
 ## Transforms
 
 * `trim`

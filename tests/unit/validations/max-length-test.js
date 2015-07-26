@@ -19,7 +19,7 @@ test('inValid', function(assert) {
   const Context = Ember.Object.extend({});
   const maxLength = maxLengthValidator.validate.bind(Context.create({maxLength: '2'}));
 
-  assert.deepEqual(maxLength('123', []), ['Max length of 2 allowed']);
+  assert.deepEqual(maxLength('123', []), ['Please enter no more than 2 characters.']);
 });
 
 test('message override', function(assert) {

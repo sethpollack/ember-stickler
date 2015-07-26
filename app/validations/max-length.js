@@ -5,7 +5,7 @@ export default Validation.create({
     const length = this.get('maxLength');
 
     if (!value || value.length > parseInt(length)) {
-      const message = this.getWithDefault('maxLengthMessage', `Max length of ${length} allowed`);
+      const message = this.getWithDefault('maxLengthMessage', `Please enter no more than ${length} characters.`);
 
       errors.push(message);
     }
