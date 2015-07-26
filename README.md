@@ -227,6 +227,12 @@ stickler also provides a `first` helper which you can use to get the first error
 
 **Attrs:** `minMessage`
 
+#### Format
+
+**Rule:** `format`
+
+**Attrs:** `formatMessage`, `format`
+
 ## Transforms
 
 * `trim`
