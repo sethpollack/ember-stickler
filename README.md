@@ -150,43 +150,63 @@ stickler also provides a `first` helper which you can use to get the first error
 ## Validations
 
 #### Email
+
 **Rule:** `email`
+
 **Attrs:** `emailMessage`
 
 #### Required
+
 **Rule:** `required`
+
 **Attrs:** `emailMessage`
 
 #### Min Length
+
 **Rule:** `min-length`
+
 **Attrs:** `minLengthMessage`, `minLength`
 
 #### Max Length
+
 **Rule:** `max-length`
+
 **Attrs:** `maxLengthMessage`, `maxLength`
 
 #### Exists
+
 **Rule:** `exists`
+
 **Attrs:** `existsMessage`
 
 #### Url
+
 **Rule:** `url`
+
 **Attrs:** `urlMessage`
 
 #### Digits
+
 **Rule:** `digits`
+
 **Attrs:** `digitsMessage`
 
 #### Number
+
 **Rule:** `number`
+
 **Attrs:** `numberMessage`
 
 #### Date
+
 **Rule:** `date`
+
 **Attrs:** `dateMessage`
 
 #### DateISO
+
 **Rule:** `dateISO`
+
 **Attrs:** `dateISOMessage`
 
 ## Transforms
