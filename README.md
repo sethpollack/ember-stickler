@@ -209,6 +209,12 @@ stickler also provides a `first` helper which you can use to get the first error
 
 **Attrs:** `dateISOMessage`
 
+#### Credit Card
+
+**Rule:** `credit-card`
+
+**Attrs:** `creditCardMessage`
+
 ## Transforms
 
 * `trim`
