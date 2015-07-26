@@ -48,7 +48,7 @@ You can do something like this in your route:
 ```javascript
 actions: {
   submit(reset, resolve, reject) {
-    const self - this;
+    const self = this;
     self.get('service').submit({
       firstName: self.controller.get('firstName'),
       lastName: self.controller.get('lastName'),
