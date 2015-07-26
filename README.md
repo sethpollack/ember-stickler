@@ -131,7 +131,7 @@ additionally the `validation-wrappers` yield `errors` an array of error messages
 * `isInitial` // true, false
 * `text` // valid, invalid, initial
 
-##helpers
+## Helpers
 
 stickler provides `class-state` helper for managing error classes it takes `valid` as the first param and then three classes first for true, the second for false and the third for null, the third param defaults to an empty string.
 
@@ -147,7 +147,7 @@ stickler also provides a `first` helper which you can use to get the first error
 {{/if}}
 ```
 
-### Validations
+## Validations
 
 #### Email
 rule: `email`
@@ -177,7 +177,15 @@ attrs: `urlMessage`
 rule: `digits`
 attrs: `digitsMessage`
 
-### Transforms
+#### Date
+rule: `date`
+attrs: `dateMessage`
+
+#### DateISO
+rule: `dateISO`
+attrs: `dateISOMessage`
+
+## Transforms
 
 * `trim`
 
