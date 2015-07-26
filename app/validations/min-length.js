@@ -2,7 +2,7 @@ import Validation from 'ember-stickler/validation';
 
 export default Validation.create({
   validate(value, errors) {
-    const length = this.get('minLengthValue');
+    const length = this.get('minLength');
 
     if (!value || value.length < parseInt(length)) {
       const message = this.getWithDefault('minLengthMessage', `Min length of ${length} allowed`);

@@ -7,33 +7,26 @@ module('Unit | Validation | exists');
 test('valid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const exists = existsValidator.validate.bind(Context.create({}));
 
-  let exists = existsValidator.validate.bind(Context.create({}));
-
-  let result = exists('foo', []);
-
-  assert.deepEqual(result, []);
+  assert.deepEqual(exists('foo', []), []);
 });
 
 test('inValid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const exists = existsValidator.validate.bind(Context.create({}));
 
-  let exists = existsValidator.validate.bind(Context.create({}));
-
-  let result = exists('', []);
-  assert.deepEqual(result, ['This field is required']);
+  assert.deepEqual(exists('', []), ['This field is required']);
 });
 
 test('message override', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const exists = existsValidator.validate.bind(Context.create({existsMessage: 'foobar'}));
 
-  let exists = existsValidator.validate.bind(Context.create({existsMessage: 'foobar'}));
-
-  let result = exists('', []);
-  assert.deepEqual(result, ['foobar']);
+  assert.deepEqual(exists('', []), ['foobar']);
 });

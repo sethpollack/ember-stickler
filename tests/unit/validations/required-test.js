@@ -7,33 +7,26 @@ module('Unit | Validation | required');
 test('valid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const required = requiredValidator.validate.bind(Context.create({}));
 
-  let required = requiredValidator.validate.bind(Context.create({}));
-
-  let result = required('foo', []);
-
-  assert.deepEqual(result, []);
+  assert.deepEqual(required('foo', []), []);
 });
 
 test('inValid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const required = requiredValidator.validate.bind(Context.create({}));
 
-  let required = requiredValidator.validate.bind(Context.create({}));
-
-  let result = required('', []);
-  assert.deepEqual(result, ['This field is required']);
+  assert.deepEqual(required('', []), ['This field is required']);
 });
 
 test('message override', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const required = requiredValidator.validate.bind(Context.create({requiredMessage: 'foobar'}));
 
-  let required = requiredValidator.validate.bind(Context.create({requiredMessage: 'foobar'}));
-
-  let result = required('', []);
-  assert.deepEqual(result, ['foobar']);
+  assert.deepEqual(required('', []), ['foobar']);
 });

@@ -147,14 +147,37 @@ stickler also provides a `first` helper which you can use to get the first error
 {{/if}}
 ```
 
-### The following rules are currently available:
+### Validations
 
-* `email`
-* `min-length`
-* `max-length`
-* `required`
+#### Email
+rule: `email`
+attrs: `emailMessage`
 
-### The following transforms are currently available:
+#### Required
+rule: `required`
+attrs: `emailMessage`
+
+#### Min Length
+rule: `min-length`
+attrs: `minLengthMessage`, `minLength`
+
+#### Max Length
+rule: `max-length`
+attrs: `maxLengthMessage`, `maxLength`
+
+#### Exists
+rule: `exists`
+attrs: `existsMessage`
+
+#### Url
+rule: `url`
+attrs: `urlMessage`
+
+#### Digits
+rule: `digits`
+attrs: `digitsMessage`
+
+### Transforms
 
 * `trim`
 

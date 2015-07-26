@@ -7,33 +7,26 @@ module('Unit | Validation | maxLength');
 test('valid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const maxLength = maxLengthValidator.validate.bind(Context.create({maxLength: '2'}));
 
-  let maxLength = maxLengthValidator.validate.bind(Context.create({maxLengthValue: '2'}));
-
-  let result = maxLength('1', []);
-
-  assert.deepEqual(result, []);
+  assert.deepEqual(maxLength('1', []), []);
 });
 
 test('inValid', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const maxLength = maxLengthValidator.validate.bind(Context.create({maxLength: '2'}));
 
-  let maxLength = maxLengthValidator.validate.bind(Context.create({maxLengthValue: '2'}));
-
-  let result = maxLength('123', []);
-  assert.deepEqual(result, ['Max length of 2 allowed']);
+  assert.deepEqual(maxLength('123', []), ['Max length of 2 allowed']);
 });
 
 test('message override', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const maxLength = maxLengthValidator.validate.bind(Context.create({maxLength: '2', maxLengthMessage: 'foobar'}));
 
-  let maxLength = maxLengthValidator.validate.bind(Context.create({maxLengthValue: '2', maxLengthMessage: 'foobar'}));
-
-  let result = maxLength('123', []);
-  assert.deepEqual(result, ['foobar']);
+  assert.deepEqual(maxLength('123', []), ['foobar']);
 });

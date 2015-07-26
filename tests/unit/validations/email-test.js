@@ -5,35 +5,46 @@ import { module, test } from 'qunit';
 module('Unit | Validation | email');
 
 test('valid', function(assert) {
-  assert.expect(1);
+  assert.expect(10);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const email = emailValidator.validate.bind(Context.create({}));
+  const errors = [];
 
-  let email = emailValidator.validate.bind(Context.create({}));
-
-  let result = email('f@b.c', []);
-
-  assert.deepEqual(result, []);
+  assert.deepEqual(email('name@domain', []), errors);
+  assert.deepEqual(email('name@domain.tld', []), errors);
+  assert.deepEqual(email('name@domain.tl', []), errors);
+  assert.deepEqual(email('bart+bart@tokbox.com', []), errors);
+  assert.deepEqual(email('bart+bart@tokbox.travel', []), errors);
+  assert.deepEqual(email('n@d.tld', []), errors);
+  assert.deepEqual(email('bla.blu@g.mail.com', []), errors);
+  assert.deepEqual(email('name.@domain.tld', []), errors);
+  assert.deepEqual(email('name@website.a', []), errors);
+  assert.deepEqual(email('name@pro.photography', []), errors);
 });
 
 test('inValid', function(assert) {
-  assert.expect(1);
+  assert.expect(8);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const email = emailValidator.validate.bind(Context.create({}));
+  const errors = ['A valid email address is required'];
 
-  let email = emailValidator.validate.bind(Context.create({}));
-
-  let result = email('fb.c', []);
-  assert.deepEqual(result, ['A valid email address is required']);
+  assert.deepEqual(email('ole@føtex.dk', []), errors);
+  assert.deepEqual(email('jörn@bassistance.de', []), errors);
+  assert.deepEqual(email('name', []), errors);
+  assert.deepEqual(email('test@test-.com', []), errors);
+  assert.deepEqual(email('name@', []), errors);
+  assert.deepEqual(email('name,@domain.tld', []), errors);
+  assert.deepEqual(email('name;@domain.tld', []), errors);
+  assert.deepEqual(email('name;@domain.tld.', []), errors);
 });
 
 test('message override', function(assert) {
   assert.expect(1);
 
-  let Context = Ember.Object.extend({});
+  const Context = Ember.Object.extend({});
+  const email = emailValidator.validate.bind(Context.create({emailMessage: 'foo'}));
 
-  let email = emailValidator.validate.bind(Context.create({emailMessage: 'foo'}));
-
-  let result = email('fb.c', []);
-  assert.deepEqual(result, ['foo']);
+  assert.deepEqual(email('fb.c', []), ['foo']);
 });
