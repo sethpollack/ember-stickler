@@ -228,6 +228,7 @@ stickler also provides a `first` helper which you can use to get the first error
 ## Transforms
 
 * `trim`
+* `digit`
 
 You can add more rules/transforms by creating a `app/validations` directory and adding a
 file in the following formats:
