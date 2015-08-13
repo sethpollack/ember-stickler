@@ -4,4 +4,4 @@ export function isEqual(a, b){
   return a === b;
 }
 
-export default Ember.HTMLBars.makeBoundHelper(isEqual);
+export default Ember.Helper.helper(isEqual);
