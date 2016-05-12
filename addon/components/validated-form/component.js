@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/validated-form';
+import layout from './template';
 
 const {
   computed,
@@ -7,10 +7,15 @@ const {
   } = Ember;
 
 export default Component.extend({
-  layout: layout,
+  layout,
 
   tagName: 'form',
-  attributeBindings: ['role'],
+  attributeBindings: ['name', 'role', 'autocomplete', 'novalidate'],
+
+  name: '',
+  autocomplete: 'off',
+  novalidate: 'novalidate',
+
   fields: null,
   role: null,
   submitErrors: null,
@@ -52,7 +57,7 @@ export default Component.extend({
 
     submit() {
       const self = this;
-      
+
       self.get('fields').forEach(field => field.send('validate'));
 
       const reset = function() {

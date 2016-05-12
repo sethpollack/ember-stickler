@@ -1,0 +1,9 @@
+{{yield
+  (hash
+	  submit=(action 'submit')
+	  reset=(action 'reset')
+	  submitError=submitErrors
+	  formState=formState
+    validation=(component 'validation-wrapper' register=(action 'register'))
+  )
+}}

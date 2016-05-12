@@ -1,17 +1,15 @@
 import Ember from 'ember';
-import layout from '../templates/components/validation-wrapper';
-import runValidations from '../utils/run-validations';
+import layout from './template';
+import runValidations from '../../utils/run-validations';
 
 const {
-  observer,
-  on,
   Component,
   computed,
   run
   } = Ember;
 
 export default Component.extend({
-  layout: layout,
+  layout,
 
   tagName: '',
   submitErrors: null,

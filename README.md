@@ -7,15 +7,164 @@
 
 # Ember Stickler
 
-**Component based validations for ember**
+****Flexible DDAU form validation handling**
 
-Install with:
+Ember Stickler will handle errors from your server as easily and gracefully as
+errors from the client.  If you've ever skimped on form validation or form
+UX, and felt guilty, this library is your new guilty pleasure.
 
-```
+Stickler is comprised of two components: `validated-form` and 
+and the contextual component `form.validation`, which manage your data
+and error routing, and provide an easy access point to utilize validations.
+
+# Installation
+
+```cli
 ember install ember-stickler
 ```
 
-ember-stickler is comprised of two components `validated-form` and `validation-wrapper`. The `validation-wrappers` wrap around each input and are nested inside a `validated-form`.
+## Usage:
+
+```hbs
+
+{{#validated-form as |form|}}
+
+ {{#form.validation
+  value=intensity
+  rules="exists is-eleven"
+  submitErrors=form.errors.level
+  as |validation| }}
+
+     <label for="intensity">Department To Route Campaign Responses To</label>
+     <input type="range" id="intensity" value={{validation.value}} min=0 max=11 oninput={{action validation.validate value="target.value"}}>
+
+   {{#if validation.errors}}
+       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
+   {{/if}}
+
+ {{/form.validation}}
+
+
+ {{#form.validation
+   value=isIntense
+   rules="exists"
+   submitErrors=submitErrors.isIntense
+   as |validation| }}
+
+     <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
+     <input type="checkbox" id="checkbox-intensity" value={{validation.value}} onchange={{action validation.validate value="target.checked"}} >
+
+   {{#if validation.errors}}
+       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
+   {{/if}}
+
+ {{/form.validation}}
+
+
+ {{#form.validation
+  value=coolness
+  rules="exists is-eleven"
+  submitErrors=submitErrors.coolFactor
+  as |validation| }}
+
+     <label for="intensity">Department To Route Campaign Responses To</label>
+     <select onchange={{action validation.validate value="target.value"}}>
+       {{#each choices as |choice|}}
+           <option value={{choice}} selected={{is-equal validation.value choice}}>{{choice}}</option>
+       {{/each}}
+     </select>
+
+   {{#if validation.errors}}
+       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
+   {{/if}}
+
+ {{/form.validation}}
+
+ {{#form.validation
+  value=firstName
+  rules='trim required min-length' minLengthValue='3'
+  submitErrors=submitErrors.firstName
+  as |validation| }}
+
+    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
+      <label for='firstName'>First Name</label>
+
+      <input
+        type="text"
+        class='form-control'
+        id='firstName'
+        placeholder='first name'
+        value={{validation.value}}
+        onblur={{ action validation.validate value='target.value' }}
+        oninput={{ action validation.checkForValid value='target.value' }}>
+
+      {{#if validation.errors}}
+        <span>{{first validation.errors}}</span>
+      {{/if}}
+    </div>
+
+ {{/form.validation}}
+
+ {{#form.validation
+  value=lastName
+  rules='required max-length' maxLengthValue='3'
+  submitErrors=submitErrors.lastName
+  as |validation| }}
+
+    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
+      <label for='lastName'>Last Name</label>
+      <input
+        type="text"
+        class='form-control'
+        id='lastName'
+        placeholder='last name'
+        value={{validation.value}}
+        onblur={{ action validation.validate value='target.value' }}
+        oninput={{ action validation.checkForValid value='target.value' }}>
+
+      {{#if validation.errors}}
+        <span>{{first validation.errors}}</span>
+      {{/if}}
+    </div>
+
+ {{/form.validation}}
+
+
+ {{#form.validation
+  value=email
+  rules='required email'
+  submitErrors=submitErrors.email
+  as |validation| }}
+
+    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
+      <label for='email'>Email</label>
+      <input
+        type="text"
+        class='form-control'
+        id='email'
+        placeholder='email'
+        value={{validation.value}}
+        onblur={{ action validation.validate value='target.value' }}
+        oninput={{ action validation.checkForValid value='target.value' }}>
+
+      {{#if validation.errors}}
+        <span>{{first validation.errors}}</span>
+      {{/if}}
+    </div>
+
+ {{/form.validation}}
+  <p>
+    <button class='btn btn-primary' type="submit" disabled={{form.state.disabled}} {{action form.submit}}>Submit</button>
+  </p>
+
+{{/validated-form}}
+
+```
+
+
+Validations are added with a rules attribute `rules=''` and are separated by spaces.
+Messages and other defaults can be overridden with additional camelCased attributes formatted 
+like `<validation-name><option>`.
 
 ```hbs
   {{#validated-form}}
@@ -134,8 +283,8 @@ stickler provides `class-state` helper for managing error classes it takes `vali
 stickler also provides a `first` helper which you can use to get the first error message from `errors`
 
 ```hbs
-{{#if errors}}
-  <span>{{first errors}}</span>
+{{#if validation.errors}}
+  <span>{{first validation.errors}}</span>
 {{/if}}
 ```
 
@@ -263,154 +412,6 @@ The `this` context in all the rules will be the component that the
 rule is validating allowing access to the value `const value = this.get('value');` as well
 as any other attrs `const value = this.get('minLengthMessage');`.
 
-
-## Full Example
-
-```hbs
-<div class='container'>
-  <h2>Test Form</h2>
-
- {{#validated-form as |register submit reset submitErrors formState| }}
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules="exists is-eleven"
-    submitErrors=submitErrors.intensity
-    as |checkForValid validate errors validationState| }}
-
-       <label for="intensity">Department To Route Campaign Responses To</label>
-       <input type="range" id="intensity" value={{intensity}} min=0 max=11 oninput={{action validate value="target.value"}}>
-
-     {{#if errors}}
-         <div class="col-xs-12 text-small text-danger">{{first errors}}</div>
-     {{/if}}
-
-   {{/validation-wrapper}}
-
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules="exists"
-    submitErrors=submitErrors.isIntense
-    as |checkForValid validate errors validationState| }}
-
-       <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
-       <input type="checkbox" id="checkbox-intensity" value={{isIntense}} onchange={{action validate value="target.checked"}} >
-
-     {{#if errors}}
-         <div class="col-xs-12 text-small text-danger">{{first errors}}</div>
-     {{/if}}
-
-   {{/validation-wrapper}}
-
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules="exists is-eleven"
-    submitErrors=submitErrors.coolness
-    as |checkForValid validate errors validationState| }}
-
-       <label for="intensity">Department To Route Campaign Responses To</label>
-       <select onchange={{action validate value="target.value"}}>
-         {{#each choices key="@identity" as |choice|}}
-             <option value={{choice}} selected={{is-equal coolness choice}}>{{choice}}</option>
-         {{/each}}
-       </select>
-
-     {{#if errors}}
-         <div class="col-xs-12 text-small text-danger">{{first errors}}</div>
-     {{/if}}
-
-   {{/validation-wrapper}}
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules='trim required min-length' minLengthValue='3'
-    submitErrors=submitErrors.firstName
-    as |checkForValid validate errors validationState| }}
-
-      <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
-        <label for='firstName'>First Name</label>
-
-        <input
-          type="text"
-          class='form-control'
-          id='firstName'
-          placeholder='first name'
-          value={{firstName}}
-          onblur={{ action (action validate) value='target.value' }}
-          oninput={{ action (action checkForValid) value='target.value' }}>
-
-        {{#if errors}}
-          <span>{{first errors}}</span>
-        {{/if}}
-      </div>
-
-   {{/validation-wrapper}}
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules='required max-length' maxLengthValue='3'
-    submitErrors=submitErrors.lastName
-    as |checkForValid validate errors validationState| }}
-
-      <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
-        <label for='lastName'>Last Name</label>
-        <input
-          type="text"
-          class='form-control'
-          id='lastName'
-          placeholder='last name'
-          value={{lastName}}
-          onblur={{ action (action validate) value='target.value' }}
-          oninput={{ action (action checkForValid) value='target.value' }}>
-
-        {{#if errors}}
-          <span>{{first errors}}</span>
-        {{/if}}
-      </div>
-
-   {{/validation-wrapper}}
-
-
-   {{#validation-wrapper
-    class="input-group"
-    register=register
-    rules='required email'
-    submitErrors=submitErrors.email
-    as |checkForValid validate errors validationState| }}
-
-      <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
-        <label for='email'>Email</label>
-        <input
-          type="text"
-          class='form-control'
-          id='email'
-          placeholder='email'
-          value={{email}}
-          onblur={{ action (action validate) value='target.value' }}
-          oninput={{ action (action checkForValid) value='target.value' }}>
-
-        {{#if errors}}
-          <span>{{first errors}}</span>
-        {{/if}}
-      </div>
-
-   {{/validation-wrapper}}
-    <p>
-      <button class='btn btn-primary' disabled={{formState.disabled}} {{action submit}}>Submit</button>
-    </p>
-
- {{/validated-form}}
-
-</div>
-
-```
 
 ## Authors
 * [Seth Pollack](https://github.com/sethpollack)
