@@ -4,4 +4,4 @@ export function first([errors]) {
   return errors[0];
 }
 
-export default Ember.HTMLBars.makeBoundHelper(first);
+export default Ember.Helper.helper(first);

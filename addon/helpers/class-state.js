@@ -8,4 +8,4 @@ export function classState([value, trueClass, falseClass, initialClass]) {
   return value ? trueClass : falseClass;
 }
 
-export default Ember.HTMLBars.makeBoundHelper(classState);
+export default Ember.Helper.helper(classState);
