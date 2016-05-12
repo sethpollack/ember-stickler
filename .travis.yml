@@ -41,6 +41,7 @@ addons:
 
 after_script:
   - codeclimate-test-reporter < lcov.info
+  - cat lcov.info | node_modules/coveralls/bin/coveralls.js
 
 branches:
   only:
