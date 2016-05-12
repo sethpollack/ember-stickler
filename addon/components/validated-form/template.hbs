@@ -1,9 +1,15 @@
+{{#if autoCompleteWayOff}}
+  {{!-- fake fields are a workaround for chrome autofill getting the wrong fields --}}
+  <input id="username" style="display:none" type="text" name="fakeusernameremembered">
+  <input id="password" style="display:none" type="password" name="fakepasswordremembered">
+{{/if}}
+
 {{yield
   (hash
 	  submit=(action 'submit')
 	  reset=(action 'reset')
-	  submitError=submitErrors
-	  formState=formState
+	  errors=submitErrors
+	  state=formState
     validation=(component 'validation-wrapper' register=(action 'register'))
   )
 }}

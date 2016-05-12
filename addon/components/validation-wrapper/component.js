@@ -49,6 +49,7 @@ export default Component.extend({
   }),
 
   actions: {
+
     checkForValid(value) {
       if(value !== undefined) {
         this.set('value', value);
@@ -105,7 +106,7 @@ export default Component.extend({
     }
 
     rules = rules.map(rule => this.container.lookupFactory(`validation:${rule}`))
-    .filter(rule => !!rule);
+      .filter(rule => !!rule);
 
     this.set('selectedRules', rules);
 

@@ -7,7 +7,7 @@
 
 # Ember Stickler
 
-****Flexible DDAU form validation handling**
+**Flexible DDAU form validation handling**
 
 Ember Stickler will handle errors from your server as easily and gracefully as
 errors from the client.  If you've ever skimped on form validation or form
@@ -27,177 +27,93 @@ ember install ember-stickler
 
 ```hbs
 
-{{#validated-form as |form|}}
+{{#validated-form action=(action submitForm model) as |form|}}
 
- {{#form.validation
-  value=intensity
-  rules="exists is-eleven"
-  submitErrors=form.errors.level
-  as |validation| }}
+  {{!-- with native inputs --}}
+  {{#form.validation rules="exists" as |validation|}}
 
-     <label for="intensity">Department To Route Campaign Responses To</label>
-     <input type="range" id="intensity" value={{validation.value}} min=0 max=11 oninput={{action validation.validate value="target.value"}}>
+    <label for="intensity">Department To Route Campaign Responses To</label>
+    <input type="range" id="intensity" value={{someValue}} min=0 max=11 oninput={{action validation.validate value="target.value"}}>
 
-   {{#if validation.errors}}
-       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
-   {{/if}}
+    {{#if validation.errors}}
+      <div class="text-danger">{{first validation.errors}}</div>
+    {{/if}}
 
+ {{/form.validation}}
+ 
+ {{!-- with Ember inputs --}}
+ {{#form.validation minLength=8 rules="trim required min-length" as |v|}}
+   {{input
+       class=(join ' ' 'factsumo-input' (for-bool v.state.valid 'has-success' 'has-error'))
+       type="password"
+       autocomplete="new-password"
+       placeholder='Password'
+       value=myNewPassword
+       focus-out=(action v.validate myNewPassword)
+       input=(action v.check myNewPassword)
+   }}
  {{/form.validation}}
 
 
- {{#form.validation
-   value=isIntense
-   rules="exists"
-   submitErrors=submitErrors.isIntense
-   as |validation| }}
+ {{!-- with a native select --}}
+ {{#form.validation rules="exists" as |validation|}}
 
-     <label for="checkbox-intensity">Department To Route Campaign Responses To</label>
-     <input type="checkbox" id="checkbox-intensity" value={{validation.value}} onchange={{action validation.validate value="target.checked"}} >
-
-   {{#if validation.errors}}
-       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
-   {{/if}}
-
- {{/form.validation}}
-
-
- {{#form.validation
-  value=coolness
-  rules="exists is-eleven"
-  submitErrors=submitErrors.coolFactor
-  as |validation| }}
-
-     <label for="intensity">Department To Route Campaign Responses To</label>
      <select onchange={{action validation.validate value="target.value"}}>
        {{#each choices as |choice|}}
-           <option value={{choice}} selected={{is-equal validation.value choice}}>{{choice}}</option>
+           <option value={{choice}} selected={{is-equal currentValue choice}}>{{choice}}</option>
        {{/each}}
      </select>
 
-   {{#if validation.errors}}
-       <div class="col-xs-12 text-small text-danger">{{first validation.errors}}</div>
-   {{/if}}
-
  {{/form.validation}}
 
- {{#form.validation
-  value=firstName
-  rules='trim required min-length' minLengthValue='3'
-  submitErrors=submitErrors.firstName
-  as |validation| }}
-
-    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
-      <label for='firstName'>First Name</label>
-
-      <input
-        type="text"
-        class='form-control'
-        id='firstName'
-        placeholder='first name'
-        value={{validation.value}}
-        onblur={{ action validation.validate value='target.value' }}
-        oninput={{ action validation.checkForValid value='target.value' }}>
-
-      {{#if validation.errors}}
-        <span>{{first validation.errors}}</span>
-      {{/if}}
-    </div>
-
- {{/form.validation}}
-
- {{#form.validation
-  value=lastName
-  rules='required max-length' maxLengthValue='3'
-  submitErrors=submitErrors.lastName
-  as |validation| }}
-
-    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
-      <label for='lastName'>Last Name</label>
-      <input
-        type="text"
-        class='form-control'
-        id='lastName'
-        placeholder='last name'
-        value={{validation.value}}
-        onblur={{ action validation.validate value='target.value' }}
-        oninput={{ action validation.checkForValid value='target.value' }}>
-
-      {{#if validation.errors}}
-        <span>{{first validation.errors}}</span>
-      {{/if}}
-    </div>
-
- {{/form.validation}}
-
-
- {{#form.validation
-  value=email
-  rules='required email'
-  submitErrors=submitErrors.email
-  as |validation| }}
-
-    <div class="form-group {{class-state validation.state.valid 'has-success' 'has-error'}}">
-      <label for='email'>Email</label>
-      <input
-        type="text"
-        class='form-control'
-        id='email'
-        placeholder='email'
-        value={{validation.value}}
-        onblur={{ action validation.validate value='target.value' }}
-        oninput={{ action validation.checkForValid value='target.value' }}>
-
-      {{#if validation.errors}}
-        <span>{{first validation.errors}}</span>
-      {{/if}}
-    </div>
-
- {{/form.validation}}
-  <p>
-    <button class='btn btn-primary' type="submit" disabled={{form.state.disabled}} {{action form.submit}}>Submit</button>
-  </p>
+  {{!-- submit buttons --}}
+  <button type="submit" disabled={{form.state.disabled}} {{action form.submit}}>Submit</button>
 
 {{/validated-form}}
 
 ```
 
+## Validation Rules
 
-Validations are added with a rules attribute `rules=''` and are separated by spaces.
-Messages and other defaults can be overridden with additional camelCased attributes formatted 
-like `<validation-name><option>`.
-
+Validations are added to `form.validation` components by specifying the `rules`
+ attribute. Separate multiple rules by a space, rules will be run left to right,
+ and special `transform` rules (such as `trim` can manipulate the value for cleaner
+ comparisons.
+ 
+ 
 ```hbs
-  {{#validated-form}}
-    {{#validation-wrapper}}
-      <input type='text' value={{value}}/>
-    {{/validation-wrapper}}
-  {{/validated-form}}
+  {{#form.validation
+      submitErrors=form.errors.firstName
+      rules='required min-length'
+      minLength=5
+      minLengthMessage='a minimum of 5 characters is required'
+      as |validation|
+    }}
+      ...
+  {{/form.validation}}
 ```
 
-### Validated Form
+## Validated Form Component
 
-```hbs
-  {{#validated-form as |register submit reset submitErrors formState|}}
 
-  {{/validated-form}}
-```
 `validated-form` submits by calling `sendAction` on whatever action attr you add and will default to `submit`. It invokes the action passing the following arguments `reset`, `resolve`, `reject`.
 
-The `validated-form` yields the following:
+The `validated-form` yields a hash with the following properties:
 
-1. `register`, this is used by the `validation-wrappers` to register themselves with the form.
+1. `submit` this will trigger the validations in each of the `validation-wrappers` and will submit if they all pass.
 
-2. `submit` this will trigger the validations in each of the `validation-wrappers` and will submit if they all pass.
+2. `reset` sets all the validation state and errors back to their initial state and changes the form state from `pending` to `resolved` and reject takes an error object with keys being the name of the field and value an array of error message strings.
 
-3. `reset` sets all the validation state and errors back to their initial state and changes the form state from `pending` to `resolved` and reject takes an error object with keys being the name of the field and value an array of error message strings.
-
-4. `formState` an object with the following properties:
+3. `state` an object with the following properties:
   * `isDefault`
   * `isPending`
   * `isResolved`
   * `text` // default, pending, resolved, rejected.
   * `disabled` // will be false when valid or is `disableDuringSubmit` attr is added to the `validated-form` and the submit is pending.
 
+4. `errors`
+
+5. `validation` a contextual component you can use to localize error handling.
 
 All this allows you to do something like this in your route:
 
@@ -224,63 +140,48 @@ actions: {
   }
 }
 ```
-Errors are then yielded by the `validated-form` and passed to each of the individual `validation-wrappers`.
+Errors are then yielded by the `validated-form` and passed to each of the individual `form.validation` components.
 
 ```hbs
-  {{#validated-form as |register submit reset submitErrors formState|}}
-    {{#validation-wrapper register=register submitErrors=submitErrors.firstName}}
+  {{#validated-form as |form|}}
+    {{#form.validation submitErrors=form.errors.firstName}}
       <input type='text' value={{firstName}}/>
-    {{/validation-wrapper}}
+    {{/form.validation}}
   {{/validated-form}}
 ```
 
-### Validation Wrapper
+## `form.validated` Component
 
-Validation rules are added to the `validation-wrappers` with a rules attribute `rules=''` (separated by spaces). Messages and other defaults can be overridden with additional camelCased attributes formatted like `<validation-name><option>`.
+The `form.validated` component yields the following:
 
-```hbs
-  {{#validated-form as |register submit reset submitErrors formState|}}
-    {{#validation-wrapper
-      register=register
-      submitErrors=submitErrors.firstName
-      rules='required min-length'
-      minLengthValue=5
-      minLengthMessage='a minimum of 5 characters is required'
-      as |checkForValid validate errors validationState|
-    }}
-    <input
-      type='text'
-      value={{firstName}}
-      onblur={{action checkForValid value="target.checked"}}/>
-      onchange={{action validate value="target.checked"}}/>
-    {{/validation-wrapper}}
-  {{/validated-form}}
-```
+1. `check` an action which will ignore errors and only change the state when it passes the validation.
 
-The `validated-wrapper` yields the following:
-
-1. `checkForValid` an action which will ignore errors and only change the state when it passes the validation.
-
-2. `validate` which will check for both success and errors.
+2. `validate` an action which will check for both success and errors.
 
 3. `errors` an array of error messages.
 
-4. `validationState` object with the following properties:
+4. `state` object with the following properties:
   * `valid` // null, true, false
   * `isValid` // true, false
   * `isInvalid` // true, false
   * `isInitial` // true, false
   * `text` // valid, invalid, initial
 
+
 ## Helpers
 
-stickler provides `class-state` helper for managing error classes it takes `valid` as the first param and then three classes first for true, the second for false and the third for null, the third param defaults to an empty string.
+Stickler provides a `for-bool` helper for managing error classes.
+ It takes `valid` as the first param and then three classes.
+
+  - first for true
+  - second for false
+  - third for null (defaults to an empty string)
 
 ```hbs
-  <div class="form-group {{class-state validationState.valid 'has-success' 'has-error'}}">
+  <div class="form-group {{for-bool validation.state.valid 'has-success' 'has-error'}}">
 ```
 
-stickler also provides a `first` helper which you can use to get the first error message from `errors`
+Stickler also provides a `first` helper which you can use to get the first error message from `errors`
 
 ```hbs
 {{#if validation.errors}}
@@ -288,7 +189,17 @@ stickler also provides a `first` helper which you can use to get the first error
 {{/if}}
 ```
 
-## Validations
+And a `join` helper which you can use when you need to combine strings
+with a separator (it's first arg).
+
+```
+{{input
+  class=(join ' ' 'class-a' 'class-b' 'class-c')
+}}
+```
+
+
+## Default Validations
 
 #### Email
 
@@ -379,41 +290,22 @@ stickler also provides a `first` helper which you can use to get the first error
 * `trim`
 * `digit`
 
-You can add more rules/transforms by creating a `app/validations` directory and adding a
-file in the following formats:
+You can add your own rules and transforms.
+ 
 
-For Validations:
-```javascript
-import Validation from 'ember-stickler/validation';
-export default {
-  validate(value, errors) {
-    // add rule logic here
-    // push message to errors
-    // return errors
-  }
-}
+**generate a transform**
+```cli
+ember g stickler-transform <name>
 ```
 
-For Transforms:
-
-```javascript
-import Transform from 'ember-stickler/transform';
-
-export default Transform.create({
-  transform(value) {
-    // add transform logic here
-    // return new value
-  }
-});
-
+**generate a rule**
+```cli
+ember g stickler-rule <name>
 ```
-
-The `this` context in all the rules will be the component that the
-rule is validating allowing access to the value `const value = this.get('value');` as well
-as any other attrs `const value = this.get('minLengthMessage');`.
 
 
 ## Authors
+
 * [Seth Pollack](https://github.com/sethpollack)
 * [Chris Thoburn](https://github.com/runspired)
 
@@ -421,7 +313,7 @@ as any other attrs `const value = this.get('minLengthMessage');`.
 
 The MIT License
 
-Copyright (c) 2015 [sethpollack](https://github.com/sethpollack), [runspired](https://github.com/runspired)
+Copyright (c) 2015-2016 [sethpollack](https://github.com/sethpollack), [runspired](https://github.com/runspired)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

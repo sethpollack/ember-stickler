@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from './template';
 
 const {
+  A,
   computed,
   Component,
   } = Ember;
@@ -15,6 +16,7 @@ export default Component.extend({
   name: '',
   autocomplete: 'off',
   novalidate: 'novalidate',
+  autocompleteWayOff: false,
 
   fields: null,
   role: null,
@@ -22,6 +24,7 @@ export default Component.extend({
   action: 'submit',
   disableDuringSubmit: false,
   _promiseState: 'default',
+  enableWhenDefault: false,
 
   submit(e) {
     e.preventDefault();
@@ -35,48 +38,48 @@ export default Component.extend({
     const state = this.get('_promiseState');
     const isValid = this.get('isValid');
     const disableDuringSubmit = this.get('disableDuringSubmit');
+    const enableWhenDefault = this.get('enableWhenDefault');
+    const isDefault = state === 'default';
 
     return {
       isDefault: state === 'default',
       isPending: state === 'pending',
       isResolved: state === 'resolved',
       isRejected: state === 'rejected',
-      disabled: !isValid || (disableDuringSubmit && state === 'pending'),
+      disabled: (enableWhenDefault && isDefault) ? false :
+        !isValid || (disableDuringSubmit && state === 'pending'),
       text: state
     };
   }),
 
   isValid: computed('fields.@each.valid', function() {
-    return this.get('fields').every(field => field.get('valid'));
+    return this.get('fields')
+      .every((field) => { return field.get('valid'); });
   }),
 
   actions: {
     register(params) {
-      this.get('fields').push(params);
+      this.get('fields').pushObject(params);
     },
 
     submit() {
-      const self = this;
 
-      self.get('fields').forEach(field => field.send('validate'));
+      this.get('fields').forEach(field => field.send('validate'));
 
-      const reset = function() {
-        self.send('reset');
-      };
+      const reset = () => { this.send('reset'); };
 
-      if(self.get('isValid')) {
-
-        new Promise(function(resolve, reject) {
-          self.set('_promiseState', 'pending');
-          self.sendAction('action', reset, resolve, reject);
+      if(this.get('isValid')) {
+        new Promise((resolve, reject) => {
+          this.set('_promiseState', 'pending');
+          this.sendAction('action', reset, resolve, reject);
         })
-        .then(function() {
-          self.set('submitErrors', null);
-          self.set('_promiseState', 'resolved');
+        .then(() => {
+          this.set('submitErrors', null);
+          this.set('_promiseState', 'resolved');
         })
-        .catch(function(errors) {
-          self.set('submitErrors', errors);
-          self.set('_promiseState', 'rejected');
+        .catch((errors) => {
+          this.set('submitErrors', errors);
+          this.set('_promiseState', 'rejected');
         });
       }
     },
@@ -87,8 +90,8 @@ export default Component.extend({
     }
   },
 
-  init: function() {
+  init() {
     this._super();
-    this.set('fields', Ember.A());
+    this.set('fields', new A([]));
   }
 });

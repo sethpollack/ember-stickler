@@ -1,9 +1,8 @@
 {{yield
   (hash
-    value=value
 	  check=(action "checkForValid")
 	  validate=(action "validate")
-	  totalErrors=totalErrors
+	  errors=totalErrors
 	  state=validationState
   )
 }}

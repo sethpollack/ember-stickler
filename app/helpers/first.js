@@ -1,1 +1,1 @@
-export { default, first } from 'ember-stickler/helpers/first';
+export { default } from 'ember-stickler/helpers/first';
