@@ -1,57 +1,68 @@
 {
   "name": "ember-stickler",
   "version": "0.0.3",
-  "description": "Component based validations for Ember",
+  "description": "Flexible Component based DDAU form validation handling for Ember",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
   "scripts": {
-    "start": "ember server",
     "build": "ember build",
+    "start": "ember server",
     "test": "ember try:testall"
   },
   "repository": "https://github.com/sethpollack/ember-stickler",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "Seth Pollack",
+  "contributors": [
+    {
+      "name": "Chris Thoburn",
+      "url": "https://runspired.com/"
+    },
+    {
+      "name": "Seth Pollack",
+      "url": "https://github.com/sethpollack"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
-    "broccoli-asset-rev": "^2.0.2",
-    "ember-cli": "1.13.1",
-    "ember-cli-app-version": "0.4.0",
-    "ember-cli-blanket": "0.5.3",
-    "ember-cli-content-security-policy": "0.4.0",
-    "ember-cli-dependency-checker": "^1.0.0",
-    "ember-cli-ic-ajax": "0.2.1",
-    "ember-cli-inject-live-reload": "^1.3.0",
-    "ember-cli-qunit": "0.3.15",
-    "ember-cli-release": "0.2.3",
-    "ember-cli-uglify": "^1.0.1",
-    "ember-data": "1.13.5",
-    "ember-disable-prototype-extensions": "^1.0.0",
-    "ember-disable-proxy-controllers": "^1.0.0",
-    "ember-export-application-global": "^1.0.2",
-    "ember-try": "0.0.6",
-    "grunt": "0.4.5",
-    "grunt-bump": "0.0.16",
-    "grunt-cli": "0.1.13",
-    "jit-grunt": "0.9.0",
-    "time-grunt": "1.0.0",
-    "grunt-exec": "0.4.6"
+    "broccoli-asset-rev": "^2.4.2",
+    "coveralls": "^2.11.3",
+    "ember-ajax": "0.7.1",
+    "ember-cli": "2.5.0",
+    "ember-cli-app-version": "^1.0.0",
+    "ember-cli-blanket": "0.9.4",
+    "ember-cli-changelog": "0.3.4",
+    "ember-cli-dependency-checker": "^1.2.0",
+    "ember-cli-htmlbars-inline-precompile": "^0.3.1",
+    "ember-cli-inject-live-reload": "^1.4.0",
+    "ember-cli-jshint": "^1.0.0",
+    "ember-cli-qunit": "^1.4.0",
+    "ember-cli-release": "1.0.0-beta.1",
+    "ember-cli-sri": "^2.1.0",
+    "ember-cli-uglify": "^1.2.0",
+    "ember-data": "^2.5.0",
+    "ember-disable-prototype-extensions": "^1.1.0",
+    "ember-export-application-global": "^1.0.5",
+    "ember-getowner-polyfill": "1.0.1",
+    "ember-load-initializers": "^0.5.1",
+    "ember-resolver": "^2.0.3",
+    "ember-suave": "2.0.1",
+    "ember-try": "^0.2.2",
+    "istanbul": "^0.3.17",
+    "loader.js": "^4.0.1"
   },
   "keywords": [
-    "ember",
-    "component",
+    "ember-addon",
+    "form",
     "validations",
     "validate",
-    "stickler",
-    "ember-addon"
+    "stickler"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.0.0",
-    "ember-cli-htmlbars": "0.7.9"
+    "ember-cli-babel": "^5.1.6",
+    "ember-cli-htmlbars": "^1.0.3"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

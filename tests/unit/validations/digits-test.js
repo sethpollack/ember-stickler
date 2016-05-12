@@ -32,7 +32,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const digits = digitsValidator.validate.bind(Context.create({digitsMessage: 'foo'}));
+  const digits = digitsValidator.validate.bind(Context.create({ digitsMessage: 'foo' }));
 
   assert.deepEqual(digits('100.100,0,0', []), ['foo']);
 });

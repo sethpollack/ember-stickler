@@ -30,7 +30,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const date = dateValidator.validate.bind(Context.create({dateMessage: 'foo'}));
+  const date = dateValidator.validate.bind(Context.create({ dateMessage: 'foo' }));
 
   assert.deepEqual(date('1990x-06-06', []), ['foo']);
 });

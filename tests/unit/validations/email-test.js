@@ -44,7 +44,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const email = emailValidator.validate.bind(Context.create({emailMessage: 'foo'}));
+  const email = emailValidator.validate.bind(Context.create({ emailMessage: 'foo' }));
 
   assert.deepEqual(email('fb.c', []), ['foo']);
 });

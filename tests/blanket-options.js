@@ -1,3 +1,5 @@
+/* jshint node: true */
+// jscs:disable
 /* globals blanket, module */
 
 var options = {
@@ -14,8 +16,10 @@ var options = {
     }
   }
 };
+
 if (typeof exports === 'undefined') {
   blanket.options(options);
+
 } else {
   module.exports = options;
 }

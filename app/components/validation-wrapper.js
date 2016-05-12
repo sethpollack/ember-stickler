@@ -1,1 +1,1 @@
-export { default } from 'ember-stickler/components/validation-wrapper';
+export { default } from 'ember-stickler/components/validation-wrapper/component';

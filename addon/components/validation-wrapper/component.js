@@ -1,17 +1,16 @@
 import Ember from 'ember';
-import layout from '../templates/components/validation-wrapper';
-import runValidations from '../utils/run-validations';
+import layout from './template';
+import runValidations from '../../utils/run-validations';
+import getOwner from 'ember-getowner-polyfill';
 
 const {
-  observer,
-  on,
   Component,
   computed,
   run
   } = Ember;
 
 export default Component.extend({
-  layout: layout,
+  layout,
 
   tagName: '',
   submitErrors: null,
@@ -20,7 +19,6 @@ export default Component.extend({
   selectedRules: null,
   isRequired: false,
   register: null,
-
 
   totalErrors: computed('submitErrors', 'errors', function() {
     let submitErrors = this.get('submitErrors') || [];
@@ -51,8 +49,9 @@ export default Component.extend({
   }),
 
   actions: {
+
     checkForValid(value) {
-      if(value !== undefined) {
+      if (value !== undefined) {
         this.set('value', value);
       }
       const errors = runValidations(this);
@@ -67,7 +66,7 @@ export default Component.extend({
     },
 
     validate(value) {
-      if(value !== undefined) {
+      if (value !== undefined) {
         this.set('value', value);
       }
       const errors = runValidations(this);
@@ -75,7 +74,7 @@ export default Component.extend({
       if (errors.length) {
         this.setProperties({
           valid: false,
-          errors: errors
+          errors
         });
       } else {
         this.setProperties({
@@ -94,10 +93,11 @@ export default Component.extend({
     }
   },
 
-  init: function() {
+  init() {
     this._super();
 
     let rules = this.get('rules');
+    let owner = getOwner(this);
     const register = this.get('register');
 
     rules = rules ? rules.split(' ') : [];
@@ -106,8 +106,12 @@ export default Component.extend({
       this.set('isRequired', true);
     }
 
-    rules = rules.map(rule => this.container.lookupFactory(`validation:${rule}`))
-    .filter(rule => !!rule);
+    rules = rules.map((rule) => {
+      return owner._lookupFactory(`validation:${rule}`);
+    })
+      .filter((rule) => {
+        return !!rule;
+      });
 
     this.set('selectedRules', rules);
 

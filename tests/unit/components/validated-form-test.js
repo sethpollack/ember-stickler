@@ -32,7 +32,7 @@ test('should register new fields', function(assert) {
   });
 
   const fields = component.get('fields');
-  
+
   assert.deepEqual(fields, [field]);
 });
 
@@ -49,9 +49,9 @@ test('should check if form is valid', function(assert) {
   let object1 = Obj.create({ valid: false });
   let object2 = Obj.create();
   let object3 = Obj.create();
-  
+
   this.render();
-  
+
   Ember.run(function() {
     component.send('register', object1);
     component.send('register', object2);
@@ -65,7 +65,7 @@ test('should check if form is valid', function(assert) {
   assert.equal(isValid, false);
 
   object1.set('valid', true);
-  
+
   isValid = component.get('isValid');
 
   assert.equal(isValid, true);
@@ -85,7 +85,6 @@ test('should set form state', function(assert) {
   assert.equal(formState.isRejected, false);
   assert.equal(formState.disabled, false);
   assert.equal(formState.text, 'default');
-
 
   component.set('isValid', false);
 
@@ -121,7 +120,7 @@ test('should set form state', function(assert) {
   assert.equal(formState.isRejected, false);
   assert.equal(formState.disabled, false);
   assert.equal(formState.text, 'resolved');
-  
+
   component.set('_promiseState', 'rejected');
 
   formState =  component.get('formState');
@@ -144,9 +143,9 @@ test('it should reset fields', function(assert) {
       assert.equal(params, 'reset');
     }
   };
-  
+
   this.render();
-  
+
   Ember.run(function() {
     component.send('register', object);
   });
