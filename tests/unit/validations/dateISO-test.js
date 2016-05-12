@@ -11,14 +11,14 @@ test('valid', function(assert) {
   const dateISO = dateISOValidator.validate.bind(Context.create({}));
   const errors = [];
 
-  assert.deepEqual(dateISO('1990-06-06',[]), errors);
-  assert.deepEqual(dateISO('1990-01-01',[]), errors);
-  assert.deepEqual(dateISO('1990-01-31',[]), errors);
-  assert.deepEqual(dateISO('1990-12-01',[]), errors);
-  assert.deepEqual(dateISO('1990-12-31',[]), errors);
-  assert.deepEqual(dateISO('1990/06/06',[]), errors);
-  assert.deepEqual(dateISO('1990-6-6',[]), errors);
-  assert.deepEqual(dateISO('1990/6/6',[]), errors);
+  assert.deepEqual(dateISO('1990-06-06', []), errors);
+  assert.deepEqual(dateISO('1990-01-01', []), errors);
+  assert.deepEqual(dateISO('1990-01-31', []), errors);
+  assert.deepEqual(dateISO('1990-12-01', []), errors);
+  assert.deepEqual(dateISO('1990-12-31', []), errors);
+  assert.deepEqual(dateISO('1990/06/06', []), errors);
+  assert.deepEqual(dateISO('1990-6-6', []), errors);
+  assert.deepEqual(dateISO('1990/6/6', []), errors);
 });
 
 test('inValid', function(assert) {
@@ -42,7 +42,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const dateISO = dateISOValidator.validate.bind(Context.create({dateISOMessage: 'foo'}));
+  const dateISO = dateISOValidator.validate.bind(Context.create({ dateISOMessage: 'foo' }));
 
   assert.deepEqual(dateISO('1990-106-06', []), ['foo']);
 });

@@ -26,7 +26,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const required = requiredValidator.validate.bind(Context.create({requiredMessage: 'foobar'}));
+  const required = requiredValidator.validate.bind(Context.create({ requiredMessage: 'foobar' }));
 
   assert.deepEqual(required('', []), ['foobar']);
 });

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export function classState([value, trueClass, falseClass, initialClass]) {
+export function forBool([value, trueClass, falseClass, initialClass]) {
   if (value === null) {
     return initialClass || '';
   }
@@ -8,4 +8,4 @@ export function classState([value, trueClass, falseClass, initialClass]) {
   return value ? trueClass : falseClass;
 }
 
-export default Ember.Helper.helper(classState);
+export default Ember.Helper.helper(forBool);

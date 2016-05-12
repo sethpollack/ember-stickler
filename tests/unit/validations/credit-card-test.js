@@ -31,7 +31,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const creditCard = creditCardValidator.validate.bind(Context.create({creditCardMessage: 'foo'}));
+  const creditCard = creditCardValidator.validate.bind(Context.create({ creditCardMessage: 'foo' }));
 
   assert.deepEqual(creditCard('foo', []), ['foo']);
 });

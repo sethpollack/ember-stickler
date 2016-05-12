@@ -4,7 +4,7 @@ import layout from './template';
 const {
   A,
   computed,
-  Component,
+  Component
   } = Ember;
 
 export default Component.extend({
@@ -54,7 +54,9 @@ export default Component.extend({
 
   isValid: computed('fields.@each.valid', function() {
     return this.get('fields')
-      .every((field) => { return field.get('valid'); });
+      .every((field) => {
+        return field.get('valid');
+      });
   }),
 
   actions: {
@@ -64,11 +66,15 @@ export default Component.extend({
 
     submit() {
 
-      this.get('fields').forEach(field => field.send('validate'));
+      this.get('fields').forEach((field) => {
+        return field.send('validate');
+      });
 
-      const reset = () => { this.send('reset'); };
+      const reset = () => {
+        this.send('reset');
+      };
 
-      if(this.get('isValid')) {
+      if (this.get('isValid')) {
         new Promise((resolve, reject) => {
           this.set('_promiseState', 'pending');
           this.sendAction('action', reset, resolve, reject);
@@ -85,7 +91,9 @@ export default Component.extend({
     },
 
     reset() {
-      this.get('fields').forEach(field => field.send('reset'));
+      this.get('fields').forEach((field) => {
+        field.send('reset');
+      });
       this.set('_promiseState', 'default');
     }
   },

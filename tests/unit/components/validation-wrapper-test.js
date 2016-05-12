@@ -43,7 +43,7 @@ test('rules are optional by default', function(assert) {
     rules: 'email',
     register() {}
   });
-  
+
   this.render();
 
   component.send('validate');
@@ -66,7 +66,7 @@ test('#checkForValid should not set errors', function(assert) {
   this.render();
 
   component.send('checkForValid');
-  
+
   let valid = component.get('valid');
   let errors = component.get('errors');
 
@@ -97,7 +97,7 @@ test('#checkForValid should clear errors', function(assert) {
 
   component.set('value', 'foobar');
   component.send('checkForValid');
-  
+
   valid = component.get('valid');
   errors = component.get('errors');
 
@@ -127,7 +127,6 @@ test('#validate', function(assert) {
   assert.equal(valid, true);
   assert.equal(errors, null);
 
-
   component.set('value', '');
 
   component.send('validate');
@@ -141,7 +140,7 @@ test('#validate', function(assert) {
 
 test('#reset', function(assert) {
   assert.expect(4);
-  
+
   const outer = { registered: false, fields: [] };
 
   const component = this.subject({
@@ -152,7 +151,7 @@ test('#reset', function(assert) {
       outer.fields.push(context);
     }
   });
-  
+
   this.render();
 
   component.send('validate');

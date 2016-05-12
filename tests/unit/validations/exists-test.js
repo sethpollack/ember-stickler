@@ -26,7 +26,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const exists = existsValidator.validate.bind(Context.create({existsMessage: 'foobar'}));
+  const exists = existsValidator.validate.bind(Context.create({ existsMessage: 'foobar' }));
 
   assert.deepEqual(exists('', []), ['foobar']);
 });

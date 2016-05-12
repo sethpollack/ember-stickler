@@ -48,6 +48,7 @@
     "ember-getowner-polyfill": "1.0.1",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
+    "ember-suave": "2.0.1",
     "ember-try": "^0.2.2",
     "istanbul": "^0.3.17",
     "loader.js": "^4.0.1"

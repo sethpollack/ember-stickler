@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export function isEqual(a, b){
+export function isEqual([a, b]) {
   return a === b;
 }
 

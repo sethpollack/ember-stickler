@@ -52,7 +52,7 @@ test('message override', function(assert) {
   assert.expect(1);
 
   const Context = Ember.Object.extend({});
-  const number = numberValidator.validate.bind(Context.create({numberMessage: 'foo'}));
+  const number = numberValidator.validate.bind(Context.create({ numberMessage: 'foo' }));
 
   assert.deepEqual(number('100.100,0,0', []), ['foo']);
 });
