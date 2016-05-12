@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import layout from './template';
 import runValidations from '../../utils/run-validations';
+import getOwner from 'ember-getowner-polyfill';
 
 const {
   Component,
@@ -93,10 +94,11 @@ export default Component.extend({
     }
   },
 
-  init: function() {
+  init() {
     this._super();
 
     let rules = this.get('rules');
+    let owner = getOwner(this);
     const register = this.get('register');
 
     rules = rules ? rules.split(' ') : [];
@@ -105,8 +107,8 @@ export default Component.extend({
       this.set('isRequired', true);
     }
 
-    rules = rules.map(rule => this.container.lookupFactory(`validation:${rule}`))
-      .filter(rule => !!rule);
+    rules = rules.map((rule) => { return owner._lookupFactory(`validation:${rule}`); })
+      .filter((rule) => { return !!rule; });
 
     this.set('selectedRules', rules);
 
