@@ -19,9 +19,9 @@ export default Component.extend({
   novalidate: 'novalidate',
   autocompleteWayOff: false,
 
-  fields: null,
-  role: null,
-  submitErrors: null,
+  fields: undefined,
+  role:  undefined,
+  submitErrors:  undefined,
   action: 'submit',
   disableDuringSubmit: false,
   _promiseState: 'default',
@@ -61,11 +61,12 @@ export default Component.extend({
   }),
 
   actions: {
+
     register(params) {
       this.get('fields').pushObject(params);
     },
 
-    unregister(params) {
+    forget(params) {
       this.get('fields').removeObject(params);
     },
 
@@ -85,7 +86,7 @@ export default Component.extend({
           this.sendAction('action', reset, resolve, reject);
         })
         .then(() => {
-          this.set('submitErrors', null);
+          this.set('submitErrors', undefined);
           this.set('_promiseState', 'resolved');
         })
         .catch((errors) => {

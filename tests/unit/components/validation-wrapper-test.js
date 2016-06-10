@@ -1,4 +1,9 @@
 import { moduleForComponent, test } from 'ember-qunit';
+import Ember from 'ember';
+
+const {
+  run
+  } = Ember;
 
 moduleForComponent('validation-wrapper', 'Unit | Component | validation wrapper', {
   needs: ['validation:required', 'validation:email'],
@@ -6,19 +11,29 @@ moduleForComponent('validation-wrapper', 'Unit | Component | validation wrapper'
 });
 
 test('registers component on init', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
 
   let register = null;
+  let forget = null;
 
   const component = this.subject({
     register(params) {
       register = params;
+    },
+    forget(params) {
+      forget = params;
     }
   });
 
   this.render();
 
   assert.equal(register, component);
+
+  run(() => {
+    component.destroy();
+  });
+
+  assert.equal(forget, component);
 });
 
 test('loads rules on #init', function(assert) {
@@ -26,7 +41,8 @@ test('loads rules on #init', function(assert) {
 
   const component = this.subject({
     rules: 'required',
-    register() {}
+    register() {},
+    forget() {}
   });
 
   this.render();
@@ -41,7 +57,8 @@ test('rules are optional by default', function(assert) {
 
   const component = this.subject({
     rules: 'email',
-    register() {}
+    register() {},
+    forget() {}
   });
 
   this.render();
@@ -60,7 +77,8 @@ test('#checkForValid should not set errors', function(assert) {
 
   const component = this.subject({
     rules: 'required',
-    register() {}
+    register() {},
+    forget() {}
   });
 
   this.render();
@@ -79,7 +97,8 @@ test('#checkForValid should clear errors', function(assert) {
 
   const component = this.subject({
     rules: 'required',
-    register() {}
+    register() {},
+    forget() {}
   });
 
   this.render();
@@ -111,7 +130,8 @@ test('#validate', function(assert) {
   const component = this.subject({
     rules: 'required',
     value: 'foo',
-    register() {}
+    register() {},
+    forget() {}
   });
 
   this.render();
@@ -149,7 +169,8 @@ test('#reset', function(assert) {
     register(context) {
       outer.registered = true;
       outer.fields.push(context);
-    }
+    },
+    forget() {}
   });
 
   this.render();
@@ -178,17 +199,18 @@ test('#validationState', function(assert) {
   assert.expect(15);
 
   const component = this.subject({
-    register() {}
+    register() {},
+    forget() {}
   });
 
   let formState;
 
   formState =  component.get('validationState');
 
-  assert.equal(formState.valid, null);
-  assert.equal(formState.isValid, false);
-  assert.equal(formState.isInvalid, false);
-  assert.equal(formState.isInitial, true);
+  assert.equal(formState.valid, undefined, 'initial state of `valid` is `undefined`');
+  assert.equal(formState.isValid, false, 'initial state of `isValid` is `false`');
+  assert.equal(formState.isInvalid, false, 'initial state of `isInvalid` is `false`');
+  assert.equal(formState.isInitial, true, 'initial state of `isInitial` is `true`');
   assert.equal(formState.text, 'initial');
 
   component.set('valid', true);
@@ -217,6 +239,7 @@ test('#totalErrors', function(assert) {
 
   const component = this.subject({
     register() {},
+    forget() {},
     errors: 'foo',
     submitErrors: 'bar'
   });

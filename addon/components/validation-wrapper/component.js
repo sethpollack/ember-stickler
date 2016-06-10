@@ -13,12 +13,21 @@ export default Component.extend({
   layout,
 
   tagName: '',
-  submitErrors: null,
-  errors: null,
-  valid: null,
-  selectedRules: null,
+  submitErrors: undefined,
+  errors: undefined,
+  valid: undefined,
+  selectedRules: undefined,
   isRequired: false,
-  register: null,
+  register: undefined,
+  forget: undefined,
+
+  willDestroy() {
+    this._super();
+    let forget = this.get('forget');
+    let register = this.get('register');
+
+    forget(this);
+  },
 
   totalErrors: computed('submitErrors', 'errors', function() {
     let submitErrors = this.get('submitErrors') || [];
@@ -42,7 +51,7 @@ export default Component.extend({
     state.valid = valid;
     state.isValid = valid === true;
     state.isInvalid = valid === false;
-    state.isInitial = valid === null;
+    state.isInitial = valid === undefined;
     state.text = valid === true ? 'valid' : (valid === false ? 'invalid' : 'initial');
 
     return state;
@@ -59,8 +68,8 @@ export default Component.extend({
       if (!errors.length) {
         this.setProperties({
           valid: true,
-          errors: null,
-          submitErrors: null
+          errors: undefined,
+          submitErrors: undefined
         });
       }
     },
@@ -79,16 +88,16 @@ export default Component.extend({
       } else {
         this.setProperties({
           valid: true,
-          errors: null,
-          submitErrors: null
+          errors: undefined,
+          submitErrors: undefined
         });
       }
     },
 
     reset() {
       this.setProperties({
-        valid: null,
-        errors: null
+        valid: undefined,
+        errors: undefined
       });
     }
   },
@@ -99,6 +108,7 @@ export default Component.extend({
     let rules = this.get('rules');
     let owner = getOwner(this);
     const register = this.get('register');
+    const forget = this.get('forget');
 
     rules = rules ? rules.split(' ') : [];
 
@@ -116,10 +126,6 @@ export default Component.extend({
     this.set('selectedRules', rules);
 
     register(this);
-  },
-
-  willDestroyElement() {
-    let unregister = this.get('unregister');
-    unregister(this);
   }
+
 });
