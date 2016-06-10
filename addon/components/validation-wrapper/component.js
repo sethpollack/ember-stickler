@@ -116,5 +116,10 @@ export default Component.extend({
     this.set('selectedRules', rules);
 
     register(this);
+  },
+
+  willDestroyElement() {
+    let unregister = this.get('unregister');
+    unregister(this);
   }
 });

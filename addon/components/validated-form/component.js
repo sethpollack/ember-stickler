@@ -64,6 +64,10 @@ export default Component.extend({
       this.get('fields').pushObject(params);
     },
 
+    unregister(params) {
+      this.get('fields').removeObject(params);
+    },
+
     submit() {
 
       this.get('fields').forEach((field) => {
