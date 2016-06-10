@@ -4,7 +4,8 @@ import layout from './template';
 const {
   A,
   computed,
-  Component
+  Component,
+  RSVP
   } = Ember;
 
 export default Component.extend({
@@ -75,7 +76,7 @@ export default Component.extend({
       };
 
       if (this.get('isValid')) {
-        new Promise((resolve, reject) => {
+        new RSVP.Promise((resolve, reject) => {
           this.set('_promiseState', 'pending');
           this.sendAction('action', reset, resolve, reject);
         })
