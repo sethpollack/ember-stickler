@@ -5,7 +5,7 @@ export default Validation.create({
     const result = /Invalid|NaN/.test(new Date(value).toString());
     const minAge = this.get('minAge');
     if (result || age(value) < minAge) {
-      const message = this.getWithDefault('dateMessage', `You must be ${minAge} or older to order`);
+      const message = this.getWithDefault('minAgeMessage', `You must be ${minAge} or older to order`);
 
       errors.push(message);
     }
