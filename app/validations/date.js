@@ -3,9 +3,10 @@ import moment from 'moment';
 
 export default Validation.create({
   validate(value, errors) {
-    const result = moment(value, 'MM-DD-YYYY').isValid();
+    const result = /Invalid|NaN/.test(new Date(value).toString());
+    const valid = moment(value, 'MM-DD-YYYY').isValid();
 
-    if (!result) {
+    if (result || !valid) {
       const message = this.getWithDefault('dateMessage', 'Please enter a valid date.');
 
       errors.push(message);
