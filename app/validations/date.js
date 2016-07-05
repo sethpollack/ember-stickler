@@ -1,8 +1,9 @@
 import Validation from 'ember-stickler/validation';
+import moment from 'moment';
 
 export default Validation.create({
   validate(value, errors) {
-    const result = /Invalid|NaN/.test(new Date(value).toString());
+    const result = moment(value, 'MM-DD-YYYY').isValid();
     if (result) {
       const message = this.getWithDefault('dateMessage', 'Please enter a valid date.');
 
