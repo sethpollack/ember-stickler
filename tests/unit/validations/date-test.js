@@ -5,7 +5,7 @@ import { module, test } from 'qunit';
 module('Unit | Validation | date');
 
 test('valid', function(assert) {
-  assert.expect(2);
+  assert.expect(3);
 
   const Context = Ember.Object.extend({});
   const date = dateValidator.validate.bind(Context.create({}));
@@ -13,6 +13,7 @@ test('valid', function(assert) {
 
   assert.deepEqual(date('06/06/1990', []), errors);
   assert.deepEqual(date('6/6/06', []), errors);
+  assert.deepEqual(date('1990-06-06', []), errors);
 });
 
 test('inValid', function(assert) {
