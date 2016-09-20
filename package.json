@@ -9,8 +9,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember try:testall",
-    "postinstall": "ember g ember-cli-es5-shim"
+    "test": "ember try:testall"
   },
   "repository": "https://github.com/sethpollack/ember-stickler",
   "engines": {
