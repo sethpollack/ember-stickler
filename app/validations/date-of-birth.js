@@ -2,10 +2,19 @@ import Validation from 'ember-stickler/validation';
 
 export default Validation.create({
   validate(value, errors) {
-    const minAge = this.get('minAge');
+    const minAge = this.get('minAge'),
+      maxAge = this.get('maxAge');
+    
+    let message = null;
 
     if (age(value) < minAge) {
-      const message = this.getWithDefault('minAgeMessage', `You must be ${minAge} or older`);
+      message = this.getWithDefault('minAgeMessage', `You must be ${minAge} or older`);
+
+      errors.push(message);
+    }
+
+    if (age(value) > maxAge) {
+      message = this.getWithDefault('maxAgeMessage', `You must be younger than ${maxAge}`);
 
       errors.push(message);
     }
