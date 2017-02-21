@@ -1,13 +1,13 @@
 import Ember from 'ember';
 import layout from './template';
 import runValidations from '../../utils/run-validations';
-import getOwner from 'ember-getowner-polyfill';
 
 const {
   Component,
   computed,
+  getOwner,
   run
-  } = Ember;
+} = Ember;
 
 export default Component.extend({
   layout,
@@ -102,8 +102,8 @@ export default Component.extend({
     }
   },
 
-  init() {
-    this._super();
+  didUpdateAttrs() {
+    this._super(...arguments);
 
     let rules = this.get('rules');
     let owner = getOwner(this);

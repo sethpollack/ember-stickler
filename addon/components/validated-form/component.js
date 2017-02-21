@@ -6,7 +6,7 @@ const {
   computed,
   Component,
   RSVP
-  } = Ember;
+} = Ember;
 
 export default Component.extend({
   layout,
@@ -93,6 +93,9 @@ export default Component.extend({
           this.set('submitErrors', errors);
           this.set('_promiseState', 'rejected');
         });
+      } else {
+        const a = this.get('fields').filterBy('valid', false);
+        this.sendAction('onError', a);
       }
     },
 
@@ -105,7 +108,7 @@ export default Component.extend({
   },
 
   init() {
-    this._super();
+    this._super(...arguments);
     this.set('fields', new A([]));
   }
 });
