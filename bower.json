@@ -1,7 +1,7 @@
 {
   "name": "ember-stickler",
   "dependencies": {
-    "ember": "2.11.0",
+    "ember": "^2.11.2",
     "ember-qunit-notifications": "0.1.0",
     "bootstrap": "~3.3.5",
     "es5-shim": "^4.5.8"
