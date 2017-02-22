@@ -23,17 +23,17 @@ export default Component.extend({
 
   willDestroy() {
     this._super();
-    let forget = this.get('forget');
-    let register = this.get('register');
+    let forget = this.get('forget'),
+      register = this.get('register');
 
     forget(this);
   },
 
   totalErrors: computed('submitErrors', 'errors', function() {
-    let submitErrors = this.get('submitErrors') || [];
-    let errors = this.get('errors') || [];
+    let submitErrors = this.get('submitErrors') || [],
+      errors = this.get('errors') || [],
 
-    let total = [].concat(submitErrors).concat(errors);
+      total = [].concat(submitErrors).concat(errors);
 
     if (total.length) {
       if (this.get('valid') !== false) {
@@ -105,10 +105,15 @@ export default Component.extend({
   didUpdateAttrs() {
     this._super(...arguments);
 
-    let rules = this.get('rules');
-    let owner = getOwner(this);
     const register = this.get('register');
-    const forget = this.get('forget');
+    register(this);
+  },
+
+  init() {
+    this._super(...arguments);
+
+    let rules = this.get('rules'),
+      owner = getOwner(this);
 
     rules = rules ? rules.split(' ') : [];
 
@@ -117,15 +122,13 @@ export default Component.extend({
     }
 
     rules = rules.map((rule) => {
-      return owner._lookupFactory(`validation:${rule}`);
-    })
+        return owner._lookupFactory(`validation:${rule}`);
+      })
       .filter((rule) => {
         return !!rule;
       });
 
     this.set('selectedRules', rules);
-
-    register(this);
   }
 
 });
