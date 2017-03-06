@@ -54,7 +54,7 @@ export default Component.extend({
   }),
 
   isValid: computed('fields.@each.valid', function() {
-    return fields
+    return this.get('fields')
       .every((field) => {
         return field.get('valid');
       });
