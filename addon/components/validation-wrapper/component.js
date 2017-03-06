@@ -1,12 +1,12 @@
 import Ember from 'ember';
 import layout from './template';
 import runValidations from '../../utils/run-validations';
-import getOwner from 'ember-getowner-polyfill';
 
 const {
   Component,
   computed,
-  run
+  run,
+  getOwner
   } = Ember;
 
 export default Component.extend({
