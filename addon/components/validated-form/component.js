@@ -93,6 +93,8 @@ export default Component.extend({
           this.set('submitErrors', errors);
           this.set('_promiseState', 'rejected');
         });
+      } else {
+        this.sendAction('invalidAction');
       }
     },
 
