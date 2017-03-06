@@ -54,7 +54,7 @@ export default Component.extend({
   }),
 
   isValid: computed('fields.@each.valid', function() {
-    let fields = this.get('fields') || [];
+    let fields = this.get('fields');
 
     return fields
       .every((field) => {
@@ -95,9 +95,6 @@ export default Component.extend({
           this.set('submitErrors', errors);
           this.set('_promiseState', 'rejected');
         });
-      } else {
-        const a = this.get('fields').filterBy('valid', false);
-        this.sendAction('onError', a);
       }
     },
 
