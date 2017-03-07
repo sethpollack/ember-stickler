@@ -36,11 +36,11 @@ export default Component.extend({
   },
 
   formState: computed('isValid', '_promiseState', function() {
-    const state = this.get('_promiseState');
-    const isValid = this.get('isValid');
-    const disableDuringSubmit = this.get('disableDuringSubmit');
-    const enableWhenDefault = this.get('enableWhenDefault');
-    const isDefault = state === 'default';
+    const state = this.get('_promiseState'),
+      isValid = this.get('isValid'),
+      disableDuringSubmit = this.get('disableDuringSubmit'),
+      enableWhenDefault = this.get('enableWhenDefault'),
+      isDefault = (state === 'default');
 
     return {
       isDefault: state === 'default',
