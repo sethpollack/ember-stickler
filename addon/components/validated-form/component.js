@@ -6,7 +6,7 @@ const {
   computed,
   Component,
   RSVP
-  } = Ember;
+} = Ember;
 
 export default Component.extend({
   layout,
@@ -36,14 +36,14 @@ export default Component.extend({
   },
 
   formState: computed('isValid', '_promiseState', function() {
-    const state = this.get('_promiseState');
-    const isValid = this.get('isValid');
-    const disableDuringSubmit = this.get('disableDuringSubmit');
-    const enableWhenDefault = this.get('enableWhenDefault');
-    const isDefault = state === 'default';
+    const state = this.get('_promiseState'),
+      isValid = this.get('isValid'),
+      disableDuringSubmit = this.get('disableDuringSubmit'),
+      enableWhenDefault = this.get('enableWhenDefault'),
+      isDefault = (state === 'default');
 
     return {
-      isDefault: state === 'default',
+      isDefault,
       isPending: state === 'pending',
       isResolved: state === 'resolved',
       isRejected: state === 'rejected',
@@ -93,6 +93,9 @@ export default Component.extend({
           this.set('submitErrors', errors);
           this.set('_promiseState', 'rejected');
         });
+      } else {
+        const a = this.get('fields').filterBy('valid', false);
+        this.sendAction('onError', a);
       }
     },
 
@@ -105,7 +108,7 @@ export default Component.extend({
   },
 
   init() {
-    this._super();
+    this._super(...arguments);
     this.set('fields', new A([]));
   }
 });
