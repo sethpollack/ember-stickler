@@ -102,15 +102,14 @@ export default Component.extend({
   },
 
   didReceiveAttrs() {
+    // this._super(...arguments);
+
+  // },
+
+  // init() {
     this._super(...arguments);
 
     const register = this.get('register');
-    register(this);
-  },
-
-  init() {
-    this._super(...arguments);
-
     let rules = this.get('rules'),
       owner = getOwner(this);
 
@@ -128,6 +127,7 @@ export default Component.extend({
       });
 
     this.set('selectedRules', rules);
+    register(this);
   }
 
 });

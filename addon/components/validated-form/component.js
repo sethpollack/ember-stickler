@@ -104,7 +104,7 @@ export default Component.extend({
     }
   },
 
-  init() {
+  didReceiveAttrs() {
     this._super(...arguments);
     this.set('fields', new A([]));
   }
