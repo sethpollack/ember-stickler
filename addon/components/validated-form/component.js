@@ -97,8 +97,6 @@ export default Component.extend({
         const a = this.get('fields').filterBy('valid', false);
         this.sendAction('onError', a);
       }
-
-
     },
 
     reset() {
