@@ -43,7 +43,7 @@ export default Component.extend({
       isDefault = (state === 'default');
 
     return {
-      isDefault: state === 'default',
+      isDefault,
       isPending: state === 'pending',
       isResolved: state === 'resolved',
       isRejected: state === 'rejected',
