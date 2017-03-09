@@ -101,7 +101,7 @@ export default Component.extend({
     }
   },
 
-  didUpdateAttrs() {
+  didReceiveAttrs() {
     this._super(...arguments);
 
     const register = this.get('register');
