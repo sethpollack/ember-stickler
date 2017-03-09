@@ -103,8 +103,8 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-    const register = this.get('register');
 
+    const register = this.get('register');
     register(this);
   },
 
